@@ -19,5 +19,8 @@ from django.urls import path, include
 from .views import *
 
 urlpatterns = [
-    path('', index_test, name='index_test'),
+    path('', index, name='index'),
+    path('cats/', categories, name='cats'),
+
 ]
+
