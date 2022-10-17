@@ -24,7 +24,7 @@ from project import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
-    path('posts/', include('bboard.urls')),
+    path('', include('bboard.urls')),
 ]
 
 if settings.DEBUG:
