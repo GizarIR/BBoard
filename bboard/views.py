@@ -45,7 +45,14 @@ def index(request):
 
 def show_post(request, post_slug):
     post = get_object_or_404(Post, slug=post_slug)
-    return HttpResponse(f"Отображение статьи с id = {post}")
+    context = {
+        'post': post,
+        'menu': menu,
+        'title': post.title,
+        'cat_selected': 1,
+    }
+
+    return render(request, 'bboard/post.html', context=context)
 
 
 def show_category(request, cat_slug):
@@ -55,7 +62,7 @@ def show_category(request, cat_slug):
     # cats = Category.objects.all() # заменено на тэг get_categories
     context = {
         'posts': posts,
-        'cats': cats,
+        # 'cats': cats,
         'menu': menu,
         'title': 'Главная страница',
         'cat_selected': cat_slug,
