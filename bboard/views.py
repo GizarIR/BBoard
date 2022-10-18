@@ -52,7 +52,7 @@ def show_category(request, cat_slug):
     posts = Post.objects.filter(category__slug=cat_slug)
     if len(posts) == 0:
         raise Http404()
-    cats = Category.objects.all()
+    # cats = Category.objects.all() # заменено на тэг get_categories
     context = {
         'posts': posts,
         'cats': cats,
