@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, Http404
 
 from .models import *
 
@@ -33,10 +33,13 @@ def login(request):
 
 def index(request):
     posts = Post.objects.all()
+    cats = Category.objects.all()
     context = {
         'posts': posts,
+        'cats': cats,
         'menu': menu,
-        'title': 'Главная страница'
+        'title': 'Главная страница',
+        'cat_selected': 0,
     }
     return render(request, 'bboard/index.html', context=context)
 
@@ -44,3 +47,18 @@ def show_post(request, post_slug):
     post = get_object_or_404(Post, slug=post_slug)
     return HttpResponse(f"Отображение статьи с id = {post}")
 
+
+def show_category(request, cat_slug):
+    posts = Post.objects.filter(category__slug=cat_slug)
+    if len(posts) == 0:
+        raise Http404()
+    cats = Category.objects.all()
+    context = {
+        'posts': posts,
+        'cats': cats,
+        'menu': menu,
+        'title': 'Главная страница',
+        'cat_selected': cat_slug,
+    }
+    # print(context)
+    return render(request, 'bboard/index.html', context=context)

@@ -3,13 +3,24 @@
 {% block content %}
 <ul class="list-articles">
 	{% for p in posts %}
-			<li><h2>{{p.title}}</h2>
-	{% autoescape on %}
-	{{p.content|linebreaks|truncatewords:50}}
-	{% endautoescape %}
+		<li>
+			<div class="article-panel">
+				<p class="first">Категория: {{ p.category.name }}</p>
+				<p class="last">Дата: {{p.time_update|date:"d-m-Y H:i:s"}}</p>
+			</div>
+
+			<h2>{{ p.title }}</h2>
+			{% if p.photo %}
+				<p><img class="img-article-left thumb" src="{{ p.photo.url }}"></p>
+			{% endif %}
+
+			{% autoescape off %}
+				{{p.content|linebreaks|truncatewords:50}}
+			{% endautoescape %}
 			<div class="clear"></div>
-			<p class="link-read-post"><a href="{% url 'post' post_slug %}">Читать пост</a></p>
-			</li>
+			<p class="link-read-post"><a href="{{ p.get_absolute_url }}">Читать пост</a></p>
+
+		</li>
 	{% endfor %}
 </ul>
 {% endblock %}

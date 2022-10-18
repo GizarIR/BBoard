@@ -30,11 +30,12 @@ class PostAdmin(admin.ModelAdmin):
         'slug',
     ]
     list_filter = [
-        'title',
-        'content',
         'category',
         'author',
+        'time_create',
+        'time_update',
     ]
+    list_editable = ('is_created',)
     search_fields = ['title', 'content']
     prepopulated_fields = {"slug": ("title",)}
     list_per_page = 10
@@ -42,6 +43,7 @@ class PostAdmin(admin.ModelAdmin):
 class ReplyAdmin(admin.ModelAdmin):
     list_display = ['author', 'time_create', 'time_update', 'text', 'is_approved',]
     list_filter = ['author', 'time_create', 'time_update', 'is_approved',]
+    list_editable = ('is_approved',)
     search_fields = ['text',]
     list_per_page = 10
 
