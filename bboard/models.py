@@ -30,15 +30,16 @@ class Category(models.Model):
         - название категории, поле уникально
         - slug
     """
-    name_category = models.CharField(
+    name = models.CharField(
         max_length=64,
         unique=True,
         verbose_name='Category',
         help_text='Name of category - 64 characters',
     )
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
 
     def __str__(self):
-        return f"{self.name_category.title()}"
+        return f"{self.name.title()}"
 
     class Meta:
         verbose_name = 'Category'
@@ -69,7 +70,7 @@ class Post(models.Model):
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
     is_created = models.BooleanField(default=True)
-    replies = models.ForeignKey('Reply', on_delete=models.CASCADE, verbose_name="Reply")
+    replies = models.ForeignKey('Reply', on_delete=models.CASCADE, verbose_name="Reply", blank=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
 
     def __str__(self):
