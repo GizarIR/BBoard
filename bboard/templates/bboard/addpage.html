@@ -1,0 +1,10 @@
+{% extends 'bboard/base.html' %}
+ 
+{% block content %}
+<form action="{% url 'add_page' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {{ form.media }}
+    <button type="submit">Добавить</button>
+</form>
+{% endblock %}

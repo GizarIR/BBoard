@@ -38,10 +38,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Added for project (AFP)
+    'django.contrib.sites',
+    'django.contrib.flatpages',
     'tinymce',
     'bboard.apps.BboardConfig',
     # End Added for project (End AFP)
 ]
+
+# AFP
+SITE_ID = 1
+# End AFP
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,6 +57,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # AFP
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    # End AFP
 ]
 
 ROOT_URLCONF = 'project.urls'
