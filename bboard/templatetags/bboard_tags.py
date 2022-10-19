@@ -1,10 +1,12 @@
+# Тэги введены для использования по необходимости (могут и не быть использованы)
+
 from django import template
 from bboard.models import *
 
 
 register = template.Library()
 
-# Простые тэги позвляют включиь в шаблон любую переменную без использования функций или классов во вьюшках
+# Простые тэги позвляют включить в шаблон любую переменную без использования функций или классов во вьюшках
 # Пример использования в шаблоне {% getcats 'dd' %}
 @register.simple_tag(name='getcats')
 def get_categories(filter=None):
@@ -14,6 +16,7 @@ def get_categories(filter=None):
         return Category.objects.get(slug=filter)
 
 # данный тип тэгов позволяет включить фрагмент кода с нужными переменными
+# для использования в шаблоне: {% show_categories cat_selected=cat_selected %}
 @register.inclusion_tag('bboard/list_categories.html')
 def show_categories(sort=None, cat_selected=0):
     if not sort:

@@ -4,16 +4,11 @@ from django.urls import reverse_lazy
 
 from .forms import AddPostForm
 from .models import *
+from .utils import *
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 # Create your views here.
-
-menu = [{'title': "О сайте", 'url_name': 'about'},
-        {'title': "Добавить объявление", 'url_name': 'add_page'},
-        {'title': "Обратная связь", 'url_name': 'contact'},
-        {'title': "Войти", 'url_name': 'login'}
-]
 
 def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
@@ -27,58 +22,58 @@ def contact(request):
 def login(request):
     return HttpResponse("Авторизация")
 
-def index(request):
-    posts = Post.objects.all()
-    cats = Category.objects.all()
-    context = {
-        'posts': posts,
-        'cats': cats,
-        'menu': menu,
-        'title': 'Главная страница',
-        'cat_selected': 0,
-    }
-    return render(request, 'bboard/index.html', context=context)
+# def index(request):
+#     posts = Post.objects.all()
+#     cats = Category.objects.all()
+#     context = {
+#         'posts': posts,
+#         'cats': cats,
+#         'menu': menu,
+#         'title': 'Главная страница',
+#         'cat_selected': 0,
+#     }
+#     return render(request, 'bboard/index.html', context=context)
+#
+# def show_post(request, post_slug):
+#     post = get_object_or_404(Post, slug=post_slug)
+#     context = {
+#         'post': post,
+#         'menu': menu,
+#         'title': post.title,
+#         'cat_selected': 1,
+#     }
+#     return render(request, 'bboard/post.html', context=context)
+#
+# def show_category(request, cat_slug):
+#     posts = Post.objects.filter(category__slug=cat_slug)
+#     if len(posts) == 0:
+#         raise Http404()
+#     # cats = Category.objects.all() # заменено на тэг get_categories
+#     context = {
+#         'posts': posts,
+#         # 'cats': cats,
+#         'menu': menu,
+#         'title': 'Главная страница',
+#         'cat_selected': cat_slug,
+#     }
+#     # print(context)
+#     return render(request, 'bboard/index.html', context=context)
+#
+# def addpage(request):
+#     if request.method == 'POST':
+#         form = AddPostForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             #print(form.cleaned_data)
+#             try:
+#                 form.save()
+#                 return redirect('home')
+#             except:
+#                 form.add_error(None, 'Ошибка добавления поста')
+#     else:
+#         form = AddPostForm()
+#     return render(request, 'bboard/addpage.html', {'menu': menu, 'title': 'Добавление статьи', 'form': form})
 
-def show_post(request, post_slug):
-    post = get_object_or_404(Post, slug=post_slug)
-    context = {
-        'post': post,
-        'menu': menu,
-        'title': post.title,
-        'cat_selected': 1,
-    }
-    return render(request, 'bboard/post.html', context=context)
-
-def show_category(request, cat_slug):
-    posts = Post.objects.filter(category__slug=cat_slug)
-    if len(posts) == 0:
-        raise Http404()
-    # cats = Category.objects.all() # заменено на тэг get_categories
-    context = {
-        'posts': posts,
-        # 'cats': cats,
-        'menu': menu,
-        'title': 'Главная страница',
-        'cat_selected': cat_slug,
-    }
-    # print(context)
-    return render(request, 'bboard/index.html', context=context)
-
-def addpage(request):
-    if request.method == 'POST':
-        form = AddPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            #print(form.cleaned_data)
-            try:
-                form.save()
-                return redirect('home')
-            except:
-                form.add_error(None, 'Ошибка добавления поста')
-    else:
-        form = AddPostForm()
-    return render(request, 'bboard/addpage.html', {'menu': menu, 'title': 'Добавление статьи', 'form': form})
-
-class PostsView(ListView):
+class PostsView(DataMixin, ListView):
     model = Post
     template_name = 'bboard/index.html'
     context_object_name = 'posts'
@@ -87,9 +82,8 @@ class PostsView(ListView):
     #  Добавляем контекст в шаблоны
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Главная страница'
-        context['cat_selected'] = 0
-        context['menu'] = menu
+        c_def = self.get_user_context(title="Главная страница")
+        context = dict(list(context.items()) + list(c_def.items()))
         return context
 
     # Добавим параметры выборки данных для шаблонов
@@ -97,7 +91,7 @@ class PostsView(ListView):
     def get_queryset(self):
         return Post.objects.filter(is_published=True).order_by('-time_update')
 
-class PostsCategoryView(ListView):
+class PostsCategoryView(DataMixin, ListView):
     model = Category
     template_name = 'bboard/index.html'
     context_object_name = 'posts'
@@ -108,13 +102,12 @@ class PostsCategoryView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Категория - ' + str(context['posts'][0].category)
-        context['menu'] = menu
-        context['cat_selected'] = context['posts'][0].category.slug
-        return context
+        c_def = self.get_user_context(title='Категория - ' + str(context['posts'][0].category),
+                                      cat_selected=context['posts'][0].category.slug)
+        return dict(list(context.items()) + list(c_def.items()))
 
 
-class PostDetail(DetailView):
+class PostDetail(DataMixin, DetailView):
     model = Post
     template_name = 'bboard/post.html'
     # slug_url_kwarg = 'post_slug' # используй если нужно переименовать переменную для вьюшки - по умолчанию slug
@@ -122,17 +115,17 @@ class PostDetail(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = context['post']
-        context['menu'] = menu
-        return context
+        c_def = self.get_user_context(title=context['post'])
+        return dict(list(context.items()) + list(c_def.items()))
 
-class AddPostView(CreateView):
+class AddPostView(DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'bboard/addpage.html'
-    # success_url = reverse_lazy('home') # по умоляанию на страницу просмотра деталей
+    # success_url = reverse_lazy('home') # по умолчанию на страницу просмотра деталей
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Добавление статьи'
-        context['menu'] = menu
+        c_def = self.get_user_context(title="Добавление объявления")
+        context = dict(list(context.items()) + list(c_def.items()))
         return context
+
