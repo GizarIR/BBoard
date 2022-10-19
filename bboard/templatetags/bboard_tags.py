@@ -19,7 +19,7 @@ def show_categories(sort=None, cat_selected=0):
     if not sort:
         cats = Category.objects.all()
     else:
-        cats = Category.objects.all().orderby(sort)
+        cats = Category.objects.all().order_by(sort)
 
     return {"cats": cats, "cat_selected": cat_selected}
 

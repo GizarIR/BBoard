@@ -76,7 +76,7 @@ class Post(models.Model):
     is_created = models.BooleanField(default=True)
     replies = models.ForeignKey('Reply', on_delete=models.CASCADE, verbose_name="Отклики", blank=True, null=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
-    is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
+    is_published = models.BooleanField(default=True, verbose_name="Опубликовать")
 
     def __str__(self):
         # return f"{self.create_date:%Y-%m-%d %H:%M} --- {self.header_post}"
@@ -84,8 +84,8 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         # post это имя маршрута
-        return reverse('post', kwargs={'post_slug': self.slug})
-
+        # return reverse('post', kwargs={'post_slug': self.slug}) # для функции
+        return reverse('post', kwargs={'slug': self.slug}) # for view
     class Meta:
         verbose_name = 'Publication'
         verbose_name_plural = 'Publications'

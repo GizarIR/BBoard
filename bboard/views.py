@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.urls import reverse_lazy
 
 from .forms import AddPostForm
 from .models import *
 
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 # Create your views here.
 
@@ -77,7 +78,7 @@ def addpage(request):
         form = AddPostForm()
     return render(request, 'bboard/addpage.html', {'menu': menu, 'title': 'Добавление статьи', 'form': form})
 
-class PostView(ListView):
+class PostsView(ListView):
     model = Post
     template_name = 'bboard/index.html'
     context_object_name = 'posts'
@@ -94,4 +95,44 @@ class PostView(ListView):
     # Добавим параметры выборки данных для шаблонов
     # отображаем только те что опубликованы
     def get_queryset(self):
-        return Post.objects.filter(is_published=True)
+        return Post.objects.filter(is_published=True).order_by('-time_update')
+
+class PostsCategoryView(ListView):
+    model = Category
+    template_name = 'bboard/index.html'
+    context_object_name = 'posts'
+    allow_empty = False # выдаем ошибку 404 если выборка пуста
+
+    def get_queryset(self):
+        return Post.objects.filter(category__slug=self.kwargs['cat_slug'], is_published=True)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Категория - ' + str(context['posts'][0].category)
+        context['menu'] = menu
+        context['cat_selected'] = context['posts'][0].category.slug
+        return context
+
+
+class PostDetail(DetailView):
+    model = Post
+    template_name = 'bboard/post.html'
+    # slug_url_kwarg = 'post_slug' # используй если нужно переименовать переменную для вьюшки - по умолчанию slug
+    context_object_name = 'post'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = context['post']
+        context['menu'] = menu
+        return context
+
+class AddPostView(CreateView):
+    form_class = AddPostForm
+    template_name = 'bboard/addpage.html'
+    # success_url = reverse_lazy('home') # по умоляанию на страницу просмотра деталей
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Добавление статьи'
+        context['menu'] = menu
+        return context
