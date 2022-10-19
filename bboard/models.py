@@ -66,15 +66,15 @@ class Reply(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=255)
-    content = tinymce_models.HTMLField()
-    category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name="Category")
-    author = models.ForeignKey('Author', on_delete=models.CASCADE, verbose_name="Author")
-    photo = models.ImageField(upload_to="photos/%Y/%m/%d/")
+    title = models.CharField(max_length=255, verbose_name="Заголовок")
+    content = tinymce_models.HTMLField(verbose_name="Текст объявления")
+    category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name="Категория")
+    author = models.ForeignKey('Author', on_delete=models.CASCADE, verbose_name="Автор")
+    photo = models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name="Фото заголовка", blank=True, null=True)
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
     is_created = models.BooleanField(default=True)
-    replies = models.ForeignKey('Reply', on_delete=models.CASCADE, verbose_name="Reply", null=True)
+    replies = models.ForeignKey('Reply', on_delete=models.CASCADE, verbose_name="Отклики", blank=True, null=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
 
     def __str__(self):

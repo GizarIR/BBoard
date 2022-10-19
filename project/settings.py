@@ -142,4 +142,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # AFP
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+TINYMCE_DEFAULT_CONFIG = {
+    "height": "200px",
+    "width": "750px",
+}
 # End AFP
