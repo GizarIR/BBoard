@@ -7,6 +7,7 @@ from .models import *
 from .utils import *
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -118,10 +119,12 @@ class PostDetail(DataMixin, DetailView):
         c_def = self.get_user_context(title=context['post'])
         return dict(list(context.items()) + list(c_def.items()))
 
-class AddPostView(DataMixin, CreateView):
+class AddPostView(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'bboard/addpage.html'
-    # success_url = reverse_lazy('home') # по умолчанию на страницу просмотра деталей
+    success_url = reverse_lazy('home') # по умолчанию на страницу просмотра деталей
+    login_url = reverse_lazy('home')
+    # raise_exception = True # если нужно будет генерить исключение при неавторизованном пользователе
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
