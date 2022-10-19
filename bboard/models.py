@@ -76,6 +76,7 @@ class Post(models.Model):
     is_created = models.BooleanField(default=True)
     replies = models.ForeignKey('Reply', on_delete=models.CASCADE, verbose_name="Отклики", blank=True, null=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
+    is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
 
     def __str__(self):
         # return f"{self.create_date:%Y-%m-%d %H:%M} --- {self.header_post}"

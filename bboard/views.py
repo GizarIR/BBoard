@@ -4,6 +4,8 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from .forms import AddPostForm
 from .models import *
 
+from django.views.generic import ListView
+
 # Create your views here.
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
@@ -15,22 +17,14 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
 def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
-
 def about(request):
     return render(request, 'bboard/about.html', {'menu': menu, 'title': 'О сайте'})
-
-
-def addpage(request):
-    return HttpResponse("Добавление статьи")
-
 
 def contact(request):
     return HttpResponse("Обратная связь")
 
-
 def login(request):
     return HttpResponse("Авторизация")
-
 
 def index(request):
     posts = Post.objects.all()
@@ -52,9 +46,7 @@ def show_post(request, post_slug):
         'title': post.title,
         'cat_selected': 1,
     }
-
     return render(request, 'bboard/post.html', context=context)
-
 
 def show_category(request, cat_slug):
     posts = Post.objects.filter(category__slug=cat_slug)
@@ -71,7 +63,6 @@ def show_category(request, cat_slug):
     # print(context)
     return render(request, 'bboard/index.html', context=context)
 
-
 def addpage(request):
     if request.method == 'POST':
         form = AddPostForm(request.POST, request.FILES)
@@ -84,5 +75,23 @@ def addpage(request):
                 form.add_error(None, 'Ошибка добавления поста')
     else:
         form = AddPostForm()
-
     return render(request, 'bboard/addpage.html', {'menu': menu, 'title': 'Добавление статьи', 'form': form})
+
+class PostView(ListView):
+    model = Post
+    template_name = 'bboard/index.html'
+    context_object_name = 'posts'
+    # extra_context = {'title' : 'Главная страница'}  # для статичных данных
+
+    #  Добавляем контекст в шаблоны
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Главная страница'
+        context['cat_selected'] = 0
+        context['menu'] = menu
+        return context
+
+    # Добавим параметры выборки данных для шаблонов
+    # отображаем только те что опубликованы
+    def get_queryset(self):
+        return Post.objects.filter(is_published=True)

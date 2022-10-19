@@ -1,4 +1,6 @@
 from django import forms
+from django.core.exceptions import ValidationError
+
 from .models import *
 from tinymce.widgets import TinyMCE
 
@@ -12,6 +14,7 @@ class AddPostForm(forms.ModelForm):
             'author',
             'photo',
             'replies',
+            'is_published',
             'slug',
         ]
 
