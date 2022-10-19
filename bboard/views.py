@@ -79,6 +79,7 @@ class PostsView(DataMixin, ListView):
     template_name = 'bboard/index.html'
     context_object_name = 'posts'
     # extra_context = {'title' : 'Главная страница'}  # для статичных данных
+    # paginate_by = 3 # определен в DataMixin
 
     #  Добавляем контекст в шаблоны
     def get_context_data(self, *, object_list=None, **kwargs):
