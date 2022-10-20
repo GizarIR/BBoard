@@ -11,11 +11,11 @@ class AddPostForm(forms.ModelForm):
             'title',
             'content',
             'category',
-            'author',
+            # 'author',
             'photo',
-            'replies',
+            # 'replies',
             'is_published',
-            'slug',
+            # 'slug',
         ]
 
     content = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}), label="Текст")
