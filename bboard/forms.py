@@ -1,8 +1,10 @@
+from ckeditor.widgets import CKEditorWidget
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
 from django.core.exceptions import ValidationError
 
 from .models import *
-from tinymce.widgets import TinyMCE
+# from tinymce.widgets import TinyMCE
 
 class AddPostForm(forms.ModelForm):
     class Meta:
@@ -18,7 +20,8 @@ class AddPostForm(forms.ModelForm):
             # 'slug',
         ]
 
-    content = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}), label="Текст")
+    # content = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}), label="Текст")
+    content = forms.CharField(widget=CKEditorUploadingWidget(attrs={'cols': 80, 'rows': 30}), label="Текст")
     title = forms.TextInput(attrs={'class': 'form-input'})
 
     def __init__(self, *args, **kwargs):

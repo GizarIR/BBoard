@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
-from tinymce import models as tinymce_models
+# from tinymce import models as tinymce_models
 from django.urls import reverse
 from unidecode import unidecode
-
+# from uuslug import uuslug)
+from ckeditor_uploader.fields import RichTextUploadingField
 
 # Create your models here.
 
@@ -70,7 +71,7 @@ class Reply(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=255, verbose_name="Заголовок")
-    content = tinymce_models.HTMLField(verbose_name="Текст объявления")
+    content = RichTextUploadingField(blank=True, default='', verbose_name="Текст")
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name="Категория")
     author = models.ForeignKey('Author', on_delete=models.CASCADE, verbose_name="Автор")
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name="Фото заголовка", blank=True, null=True)
@@ -78,7 +79,7 @@ class Post(models.Model):
     time_update = models.DateTimeField(auto_now=True)
     is_created = models.BooleanField(default=True)
     replies = models.ForeignKey('Reply', on_delete=models.CASCADE, verbose_name="Отклики", blank=True, null=True)
-    slug = models.SlugField(max_length=255, allow_unicode=True, unique=True, db_index=True, verbose_name="URL")
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
     is_published = models.BooleanField(default=True, verbose_name="Опубликовать")
 
     def __str__(self):

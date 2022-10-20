@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from unidecode import unidecode
 
 # Register your models here.
 
@@ -37,7 +38,7 @@ class PostAdmin(admin.ModelAdmin):
     ]
     list_editable = ('is_created',)
     search_fields = ['title', 'content']
-    prepopulated_fields = {"slug": ("title",)}
+    prepopulated_fields = {"slug": ("title","category")}
     list_per_page = 10
 
 class ReplyAdmin(admin.ModelAdmin):
