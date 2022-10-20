@@ -164,10 +164,10 @@ TINYMCE_DEFAULT_CONFIG = {
         aligncenter alignjustify | indent outdent | bullist numlist table |
         | link image media | codesample
         ''',
-    # 'toolbar2': '''
-    #     visualblocks visualchars |
-    #     charmap hr pagebreak nonbreaking anchor |  code |
-    #     ''',
+    'toolbar2': '''
+        visualblocks visualchars |
+        charmap hr pagebreak nonbreaking anchor |  code |
+        ''',
     'contextmenu': 'formats | link image',
     'menubar': True,
     'statusbar': True,
