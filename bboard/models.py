@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.template.defaultfilters import slugify
 from tinymce import models as tinymce_models
 from django.urls import reverse
+from unidecode import unidecode
 
 # Create your models here.
 
@@ -75,7 +77,7 @@ class Post(models.Model):
     time_update = models.DateTimeField(auto_now=True)
     is_created = models.BooleanField(default=True)
     replies = models.ForeignKey('Reply', on_delete=models.CASCADE, verbose_name="Отклики", blank=True, null=True)
-    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
+    slug = models.SlugField(max_length=255, allow_unicode=True, unique=True, db_index=True, verbose_name="URL")
     is_published = models.BooleanField(default=True, verbose_name="Опубликовать")
 
     def __str__(self):
@@ -86,6 +88,12 @@ class Post(models.Model):
         # post это имя маршрута
         # return reverse('post', kwargs={'post_slug': self.slug}) # для функции
         return reverse('post', kwargs={'slug': self.slug}) # for view
+
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(unidecode(self.title))
+        return super(Post, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Publication'
         verbose_name_plural = 'Publications'

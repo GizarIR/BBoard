@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.template.defaultfilters import slugify
 from django.urls import reverse_lazy
 
 from .forms import AddPostForm
@@ -108,7 +109,16 @@ class PostsCategoryView(DataMixin, ListView):
                                       cat_selected=context['posts'][0].category.slug)
         return dict(list(context.items()) + list(c_def.items()))
 
-
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        cur_author = Author.objects.get(author_user=self.request.user)
+        print(self.request.user)
+        # post.author = cur_author
+        # post.author_user_id = cur_author.id
+        print(post.cur_author)
+        # post.author_user = Author.objects.get(author_user=self.request.user)
+        # post.slug = f"{post.author}-{slugify(form.title)}"
+        return super().form_valid(form)
 class PostDetail(DataMixin, DetailView):
     model = Post
     template_name = 'bboard/post.html'
@@ -125,7 +135,7 @@ class AddPostView(LoginRequiredMixin, DataMixin, CreateView):
     template_name = 'bboard/addpage.html'
     success_url = reverse_lazy('home') # по умолчанию на страницу просмотра деталей
     login_url = reverse_lazy('home')
-    # raise_exception = True # если нужно будет генерить исключение при неавторизованном пользователе
+    raise_exception = True # если нужно будет генерить исключение при неавторизованном пользователе
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
