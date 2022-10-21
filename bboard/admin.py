@@ -27,7 +27,6 @@ class PostAdmin(admin.ModelAdmin):
         'time_create',
         'time_update',
         'is_created',
-        'replies',
         'slug',
     ]
     list_filter = [
@@ -42,8 +41,8 @@ class PostAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 class ReplyAdmin(admin.ModelAdmin):
-    list_display = ['author', 'time_create', 'time_update', 'text', 'is_approved',]
-    list_filter = ['author', 'time_create', 'time_update', 'is_approved',]
+    list_display = ['author', 'post', 'time_create', 'time_update', 'text', 'is_approved',]
+    list_filter = ['author', 'post', 'time_create', 'time_update', 'is_approved',]
     list_editable = ('is_approved',)
     search_fields = ['text',]
     list_per_page = 10

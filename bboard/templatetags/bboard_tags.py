@@ -10,9 +10,9 @@ register = template.Library()
 def show_replies(sort=None, post_id=0):
     if not post_id == 0:
         if not sort:
-            replies = Reply.objects.filter(is_approved=True)
+            replies = Reply.objects.filter(post=post_id, is_approved=True)
         else:
-            replies = Reply.objects.filter(is_approved=True).order_by(sort)
+            replies = Reply.objects.filter(post=post_id, is_approved=True).order_by(sort)
         return {"replies": replies}
     else:
         return {"replies": {}}

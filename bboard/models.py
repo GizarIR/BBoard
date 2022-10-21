@@ -17,7 +17,7 @@ class Author(models.Model):
     author_user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        verbose_name="Author",
+        verbose_name="Автор",
     )
     one_time_code = models.CharField(max_length=255)
     time_created = models.DateTimeField(auto_now_add=True)
@@ -26,8 +26,8 @@ class Author(models.Model):
         return f'{self.author_user.username}'
 
     class Meta:
-        verbose_name = 'Author'
-        verbose_name_plural = 'Authors'
+        verbose_name = 'Автор'
+        verbose_name_plural = 'Авторы'
 
 class Category(models.Model):
     """
@@ -38,8 +38,8 @@ class Category(models.Model):
     name = models.CharField(
         max_length=64,
         unique=True,
-        verbose_name='Category',
-        help_text='Name of category - 64 characters',
+        verbose_name='Категория',
+        help_text='Имя категории длинной не более 64 символов ',
     )
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
 
@@ -55,11 +55,12 @@ class Category(models.Model):
 
 
 class Reply(models.Model):
-    author = models.ForeignKey('Author', on_delete=models.CASCADE, verbose_name="Author")
+    author = models.ForeignKey('Author', on_delete=models.CASCADE, verbose_name="Автор")
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name="Пост", blank=True, null=True)
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
-    text = models.TextField(blank=True)
-    is_approved = models.BooleanField(default=False)
+    text = models.TextField(blank=True, verbose_name="Текс")
+    is_approved = models.BooleanField(default=False, verbose_name="Разрешено")
 
     def __str__(self):
         return f"{self.id}: {self.text}"
@@ -69,8 +70,8 @@ class Reply(models.Model):
         return reverse('reply', kwargs={'pk': self.pk}) # for view
 
     class Meta:
-        verbose_name = 'Reply'
-        verbose_name_plural = 'Replies'
+        verbose_name = 'Отклик'
+        verbose_name_plural = 'Отклики'
 
 
 class Post(models.Model):
@@ -82,7 +83,7 @@ class Post(models.Model):
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
     is_created = models.BooleanField(default=True)
-    replies = models.ForeignKey('Reply', on_delete=models.CASCADE, verbose_name="Отклики", blank=True, null=True)
+    # replies = models.ForeignKey('Reply', on_delete=models.CASCADE, verbose_name="Отклики", blank=True, null=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
     is_published = models.BooleanField(default=True, verbose_name="Опубликовать")
 
@@ -101,6 +102,6 @@ class Post(models.Model):
         return super(Post, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name = 'Publication'
-        verbose_name_plural = 'Publications'
+        verbose_name = 'Объявление'
+        verbose_name_plural = 'Объявления'
 
