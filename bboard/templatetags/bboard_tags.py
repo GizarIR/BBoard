@@ -7,13 +7,15 @@ from bboard.models import *
 register = template.Library()
 
 @register.inclusion_tag('bboard/list_replies.html')
-def show_replies(sort=None):
-    if not sort:
-        replies = Reply.objects.all()
+def show_replies(sort=None, post_id=0):
+    if not post_id == 0:
+        if not sort:
+            replies = Reply.objects.filter(is_approved=True)
+        else:
+            replies = Reply.objects.filter(is_approved=True).order_by(sort)
+        return {"replies": replies}
     else:
-        replies = Reply.objects.all().order_by(sort)
-
-    return {"replies": replies}
+        return {"replies": {}}
 
 
 # # Простые тэги позвляют включить в шаблон любую переменную без использования функций или классов во вьюшках

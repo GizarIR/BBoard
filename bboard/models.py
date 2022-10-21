@@ -64,6 +64,10 @@ class Reply(models.Model):
     def __str__(self):
         return f"{self.id}: {self.text}"
 
+    def get_absolute_url(self):
+        # reply это имя маршрута
+        return reverse('reply', kwargs={'pk': self.pk}) # for view
+
     class Meta:
         verbose_name = 'Reply'
         verbose_name_plural = 'Replies'

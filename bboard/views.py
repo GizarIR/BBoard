@@ -73,6 +73,17 @@ def login(request):
 #     else:
 #         form = AddPostForm()
 #     return render(request, 'bboard/addpage.html', {'menu': menu, 'title': 'Добавление статьи', 'form': form})
+class ReplyDetail(DataMixin, DetailView):
+    model = Reply
+    template_name = 'bboard/reply.html'
+    # slug_url_kwarg = 'post_slug' # используй если нужно переименовать переменную для вьюшки - по умолчанию slug
+    context_object_name = 'reply'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Отклик на объявление")
+        return dict(list(context.items()) + list(c_def.items()))
+
 
 class PostsView(DataMixin, ListView):
     model = Post

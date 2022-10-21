@@ -1,7 +1,17 @@
-{% for c in cats %}
-         {% if c.pk == cat_selected %}
-                   <li class="selected">{{c.name}}</li>
-         {% else %}
-                   <li><a href="{{ c.get_absolute_url }}">{{c.name}}</a></li>
-         {% endif %}
-{% endfor %}
+{% if replies %}
+	<ul class="list-articles">
+		{% for rep in replies %}
+			<li>
+				<div class="article-panel">
+					<p class="first">Автор: {{ rep.author }}</p>
+					<p class="last">Дата: {{rep.time_update|date:"d-m-Y H:i:s"}} </p>
+				</div>
+				<div>
+					<p><i><a href="{{ rep.get_absolute_url }}" style="margin-left:20px;">{{rep.text}}</a></i></p>
+				</div>
+			</li>
+		{% endfor %}
+	</ul>
+{% else %}
+		<p>Откликов: 0</p>
+{% endif %}

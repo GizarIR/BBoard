@@ -1,4 +1,5 @@
 {% extends 'bboard/base.html' %}
+{% load bboard_tags %}
  
 {% block content %}
  
@@ -11,5 +12,14 @@
 {% autoescape off %}
     {{post.content|linebreaks}}
 {% endautoescape %}
+
+{% if request.user.is_authenticated %}
+    <div class="clear"></div>
+    <p class="link-read-post"><a href="#">Добавить отклик</a></p>
+{% endif %}
+
+<h3>Отклики и комментарии: {{ post.id }}</h3>
+<hr>
+{% show_replies post_id=post.id %}
 
 {% endblock %}
