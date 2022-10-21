@@ -9,6 +9,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 # Create your models here.
 
+
 class Author(models.Model):
     """
     Модель Author - объекты всех авторов, поля:
@@ -28,6 +29,7 @@ class Author(models.Model):
     class Meta:
         verbose_name = 'Автор'
         verbose_name_plural = 'Авторы'
+
 
 class Category(models.Model):
     """
@@ -50,8 +52,8 @@ class Category(models.Model):
         return reverse('category', kwargs={'cat_slug': self.slug})
 
     class Meta:
-        verbose_name = 'Category'
-        verbose_name_plural = 'Categories'
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
 
 class Reply(models.Model):

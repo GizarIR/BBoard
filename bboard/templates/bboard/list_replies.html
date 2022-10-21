@@ -4,7 +4,7 @@
 			<li>
 				<div class="article-panel">
 					<p class="first">Автор: {{ rep.author }}</p>
-					<p class="last">Дата: {{rep.time_update|date:"d-m-Y H:i:s"}} </p>
+					<p class="last">Дата: {{rep.time_update|date:"d-m-Y H:i:s"}}</p>
 				</div>
 				<div>
 					<p><i><a href="{{ rep.get_absolute_url }}" style="margin-left:20px;">{{rep.text}}</a></i></p>
