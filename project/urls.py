@@ -25,7 +25,6 @@ from project import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pages/', include('django.contrib.flatpages.urls')),
-    # path('tinymce/', include('tinymce.urls')),
     path('', include('bboard.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]

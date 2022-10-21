@@ -1,10 +1,10 @@
-from ckeditor.widgets import CKEditorWidget
-from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
 from django.core.exceptions import ValidationError
 
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+
 from .models import *
-# from tinymce.widgets import TinyMCE
+
 
 class AddPostForm(forms.ModelForm):
     class Meta:
@@ -28,7 +28,7 @@ class AddPostForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['category'].empty_label = "Категория не выбрана"
 
-    # простой валидатор длины поля начинается со слова clean_
+    # простой валидатор  поля начинается со слова clean_имя_поля, после идет проверка ввалидаторе clean
     def clean_title(self):
         title = self.cleaned_data['title']
         if len(title) > 200:
