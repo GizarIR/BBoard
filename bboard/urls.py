@@ -30,6 +30,7 @@ urlpatterns = [
     path('post/<slug:slug>/', PostDetail.as_view(), name='post'),
     # path('category/<slug:cat_slug>/', show_category, name='category'),
     path('category/<slug:cat_slug>/', PostsCategoryView.as_view(), name='category'),
-    path('reply/<int:pk>/', ReplyDetail.as_view(), name='reply')
+    path('reply/<int:pk>/', ReplyDetail.as_view(), name='reply'),
+    path('addreply/', AddReplyView.as_view(), name='add_reply'),
 ]
 

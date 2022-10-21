@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.urls import reverse_lazy
 
-from .forms import AddPostForm
+from .forms import AddPostForm, AddReplyForm
 from .models import *
 from .utils import *
 
@@ -73,6 +73,29 @@ def login(request):
 #     else:
 #         form = AddPostForm()
 #     return render(request, 'bboard/addpage.html', {'menu': menu, 'title': 'Добавление статьи', 'form': form})
+
+
+class AddReplyView(LoginRequiredMixin, DataMixin, CreateView):
+    form_class = AddReplyForm
+    template_name = 'bboard/reply_add.html'
+    # success_url = reverse_lazy('home') # по умолчанию на страницу просмотра деталей
+    login_url = reverse_lazy('home')
+    # raise_exception = True # если нужно будет генерить исключение при неавторизованном пользователе
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Добавление отклика")
+        # post_id = {'post_id': self.request.kwargs['post_id']}
+        # context = dict(list(context.items()) + list(c_def.items() + list(post_id.items())))
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
+
+    def form_valid(self, form):
+        reply = form.save(commit=False)
+        reply.author = Author.objects.get(author_user=self.request.user)
+        return super().form_valid(form)
+
+
 class ReplyDetail(DataMixin, DetailView):
     model = Reply
     template_name = 'bboard/reply.html'

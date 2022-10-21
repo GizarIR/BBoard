@@ -58,7 +58,7 @@ class Category(models.Model):
 
 class Reply(models.Model):
     author = models.ForeignKey('Author', on_delete=models.CASCADE, verbose_name="Автор")
-    post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name="Пост", blank=True, null=True)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name="Пост")
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
     text = models.TextField(blank=True, verbose_name="Текс")

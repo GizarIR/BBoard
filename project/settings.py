@@ -43,12 +43,14 @@ INSTALLED_APPS = [
     # 'tinymce',
     'ckeditor',
     'ckeditor_uploader',
+    'crispy_forms',
     'bboard.apps.BboardConfig',
     # End Added for project (End AFP)
 ]
 
 # AFP
 SITE_ID = 1
+CRISPY_TEMPLATE_PACK = 'uni_form'
 # End AFP
 
 MIDDLEWARE = [
