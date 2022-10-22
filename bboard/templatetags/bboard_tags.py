@@ -18,6 +18,14 @@ def show_replies(sort=None, post_id=0):
         return {"replies": {}}
 
 
+@register.inclusion_tag('bboard/show_post.html')
+def show_post(id_post=None):
+    if id_post is not None:
+        posts = Post.objects.filter(pk=id_post, is_published=True)
+        return {"posts": posts}
+    else:
+        return {"posts": {}}
+
 # # Простые тэги позвляют включить в шаблон любую переменную без использования функций или классов во вьюшках
 # # Пример использования в шаблоне {% getcats 'dd' %}
 # @register.simple_tag(name='getcats')

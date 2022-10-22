@@ -1,0 +1,20 @@
+{% if posts %}
+	<ul class="list-articles">
+		{% for post in posts %}
+			<p><h2>Добавление отклика к посту: {{ post.title }}</h2></p>
+			<li>
+				<div class="article-panel">
+					<p class="first">Автор: {{ post.author }}</p>
+					<p class="last">Дата: {{post.time_update|date:"d-m-Y H:i:s"}}</p>
+				</div>
+				<div>
+                    {% autoescape off %}
+                    	{{post.content|linebreaks|truncatewords:50}}
+                    {% endautoescape %}
+				</div>
+			</li>
+		{% endfor %}
+	</ul>
+{% else %}
+		<p>Объявление не найдено</p>
+{% endif %}

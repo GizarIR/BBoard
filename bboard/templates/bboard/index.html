@@ -17,6 +17,7 @@
 			{% autoescape off %}
 				{{p.content|linebreaks|truncatewords:50}}
 			{% endautoescape %}
+
 			<div class="clear"></div>
 			<p class="link-read-post"><a href="{{ p.get_absolute_url }}">Читать пост</a></p>
 

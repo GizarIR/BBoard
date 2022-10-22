@@ -5,17 +5,17 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from .models import *
 
-class AddReplyForm(forms.ModelForm):
-    class Meta:
-        model = Reply
-        fields = "__all__"
+class AddReplyForm(forms.Form):
+    # title = forms.CharField(widget=forms.TextInput(), disabled=True)
+    # content = forms.CharField(widget=forms.Textarea(attrs={'cols': 60, 'rows': 15}), disabled=True, label='Объявление')
+    text = forms.CharField(widget=forms.Textarea(attrs={'cols': 60, 'rows': 10}), disabled=True, label='Текст отклика')
+    is_approved = forms.BooleanField(label='Разрешено')
 
-    # простой валидатор  поля начинается со слова clean_имя_поля, после идет проверка ввалидаторе clean
-    def clean_text(self):
-        text = self.cleaned_data['text']
-        if len(text) == 0:
-            raise ValidationError('Текст не должен быть пустым')
-        return text
+# class AddReplyForm(forms.ModelForm):
+#     class Meta:
+#         model = Reply
+#         fields = "__all__"
+
 
 
 class AddPostForm(forms.ModelForm):

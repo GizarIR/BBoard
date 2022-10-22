@@ -1,12 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.urls import reverse_lazy
+from django.views import View
+
 
 from .forms import AddPostForm, AddReplyForm
 from .models import *
 from .utils import *
 
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
@@ -75,27 +78,6 @@ def login(request):
 #     return render(request, 'bboard/addpage.html', {'menu': menu, 'title': 'Добавление статьи', 'form': form})
 
 
-class AddReplyView(LoginRequiredMixin, DataMixin, CreateView):
-    form_class = AddReplyForm
-    template_name = 'bboard/reply_add.html'
-    # success_url = reverse_lazy('home') # по умолчанию на страницу просмотра деталей
-    login_url = reverse_lazy('home')
-    # raise_exception = True # если нужно будет генерить исключение при неавторизованном пользователе
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title="Добавление отклика")
-        # post_id = {'post_id': self.request.kwargs['post_id']}
-        # context = dict(list(context.items()) + list(c_def.items() + list(post_id.items())))
-        context = dict(list(context.items()) + list(c_def.items()))
-        return context
-
-    def form_valid(self, form):
-        reply = form.save(commit=False)
-        reply.author = Author.objects.get(author_user=self.request.user)
-        return super().form_valid(form)
-
-
 class ReplyDetail(DataMixin, DetailView):
     model = Reply
     template_name = 'bboard/reply.html'
@@ -106,7 +88,6 @@ class ReplyDetail(DataMixin, DetailView):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title="Отклик на объявление")
         return dict(list(context.items()) + list(c_def.items()))
-
 
 class PostsView(DataMixin, ListView):
     model = Post
@@ -171,3 +152,26 @@ class AddPostView(LoginRequiredMixin, DataMixin, CreateView):
         post = form.save(commit=False)
         post.author = Author.objects.get(author_user=self.request.user)
         return super().form_valid(form)
+
+class AddReplyView(DataMixin, View):
+    form_class = AddReplyForm
+    # initial = {'post_id': ''}
+    template_name = 'bboard/reply_add.html'
+
+    def get(self, request, post_id, *args, **kwargs):
+        # self.initial = post_id
+        # form = self.form_class(initial=self.initial)
+        form = self.form_class()
+        categories = self.get_user_context()['categories']
+        menu = self.get_user_context()['menu']
+        cat_selected = self.get_user_context()['cat_selected']
+        # print(post_id)
+        context = {'form': form, 'menu': menu, 'categories': categories, 'cat_selected':cat_selected, 'post_id': post_id}
+        return render(request, self.template_name, context=context )
+
+
+    def form_valid(self, form):
+        reply = form.save(commit=False)
+        reply.author = Author.objects.get(author_user=self.request.user)
+        return super().form_valid(form)
+
