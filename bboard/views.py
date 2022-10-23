@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
 
@@ -158,20 +158,29 @@ class AddReplyView(DataMixin, View):
     # initial = {'post_id': ''}
     template_name = 'bboard/reply_add.html'
 
-    def get(self, request, post_id, *args, **kwargs):
+    def get(self, request, post_slug, *args, **kwargs):
         # self.initial = post_id
         # form = self.form_class(initial=self.initial)
         form = self.form_class()
         categories = self.get_user_context()['categories']
         menu = self.get_user_context()['menu']
         cat_selected = self.get_user_context()['cat_selected']
-        # print(post_id)
-        context = {'form': form, 'menu': menu, 'categories': categories, 'cat_selected':cat_selected, 'post_id': post_id}
+        print(post_slug)
+        context = {'form': form, 'menu': menu, 'categories': categories, 'cat_selected':cat_selected, 'post_slug': post_slug}
         return render(request, self.template_name, context=context )
 
 
-    def form_valid(self, form):
-        reply = form.save(commit=False)
-        reply.author = Author.objects.get(author_user=self.request.user)
-        return super().form_valid(form)
-
+    def post(self, request, post_slug, *args, **kwargs):
+        form = self.form_class(request.POST)
+        reply = request.POST
+        if form.is_valid():
+            # <process form cleaned data>
+            # print(reply['is_approved'])
+            Reply.objects.create(
+                author = Author.objects.get(author_user=self.request.user),
+                post = Post.objects.get(slug=post_slug),
+                text = reply['text'],
+                is_approved = True
+            )
+            return redirect('post', slug=post_slug)
+        return render(request, self.template_name, {'form': form})

@@ -8,8 +8,8 @@ from .models import *
 class AddReplyForm(forms.Form):
     # title = forms.CharField(widget=forms.TextInput(), disabled=True)
     # content = forms.CharField(widget=forms.Textarea(attrs={'cols': 60, 'rows': 15}), disabled=True, label='Объявление')
-    text = forms.CharField(widget=forms.Textarea(attrs={'cols': 60, 'rows': 10}), disabled=True, label='Текст отклика')
-    is_approved = forms.BooleanField(label='Разрешено')
+    text = forms.CharField(widget=forms.Textarea(attrs={'cols': 80, 'rows': 10}), label='Текст отклика')
+    # is_approved = forms.BooleanField(label='Разрешено')
 
 # class AddReplyForm(forms.ModelForm):
 #     class Meta:

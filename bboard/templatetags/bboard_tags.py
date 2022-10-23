@@ -7,8 +7,10 @@ from bboard.models import *
 register = template.Library()
 
 @register.inclusion_tag('bboard/list_replies.html')
-def show_replies(sort=None, post_id=0):
-    if not post_id == 0:
+def show_replies(sort=None, throught_slug=False, post_id=None):
+    if throught_slug:
+        post_id = Post.objects.get(slug=post_id).pk
+    if post_id is not None:
         if not sort:
             replies = Reply.objects.filter(post=post_id, is_approved=True)
         else:
@@ -19,9 +21,9 @@ def show_replies(sort=None, post_id=0):
 
 
 @register.inclusion_tag('bboard/show_post.html')
-def show_post(id_post=None):
-    if id_post is not None:
-        posts = Post.objects.filter(pk=id_post, is_published=True)
+def show_post(slug_post=None):
+    if slug_post is not None:
+        posts = Post.objects.filter(slug=slug_post, is_published=True)
         return {"posts": posts}
     else:
         return {"posts": {}}
