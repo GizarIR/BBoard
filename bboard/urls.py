@@ -28,6 +28,7 @@ urlpatterns = [
     path('login/', login, name='login'),
     # path('post/<slug:post_slug>/', show_post, name='post'),
     path('post/<slug:slug>/', PostDetail.as_view(), name='post'),
+    path('post/<slug:slug>/update/', PostUpdate.as_view(), name='update_post'),
     # path('category/<slug:cat_slug>/', show_category, name='category'),
     path('category/<slug:cat_slug>/', PostsCategoryView.as_view(), name='category'),
     path('reply/<int:pk>/', ReplyDetail.as_view(), name='reply'),

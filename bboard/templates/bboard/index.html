@@ -19,7 +19,11 @@
 			{% endautoescape %}
 
 			<div class="clear"></div>
-			<p class="link-read-post"><a href="{{ p.get_absolute_url }}">Читать пост</a></p>
+			<p class="link-read-post">
+				<a href="{{ p.get_absolute_url }}">Читать пост</a>
+				<a href="{% url 'update_post' p.slug %}" style="background-color: #0f74a8">Редактировать</a>
+			</p>
+
 
 		</li>
 	{% endfor %}

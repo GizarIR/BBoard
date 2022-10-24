@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views import View
 
 
-from .forms import AddPostForm, AddReplyForm
+from .forms import PostForm, AddReplyForm
 from .models import *
 from .utils import *
 
@@ -13,6 +13,24 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
+
+
+class PostUpdate(DataMixin, UpdateView):
+    """Представление возвращает форму редактирования статьи"""
+    form_class = PostForm
+    model = Post
+    template_name = 'post_update.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Редактирование")
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.is_created = False
+        return super().form_valid(form)
+
 
 def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
@@ -136,7 +154,7 @@ class PostDetail(DataMixin, DetailView):
         return dict(list(context.items()) + list(c_def.items()))
 
 class AddPostView(LoginRequiredMixin, DataMixin, CreateView):
-    form_class = AddPostForm
+    form_class = PostForm
     template_name = 'bboard/addpage.html'
     success_url = reverse_lazy('home') # по умолчанию на страницу просмотра деталей
     login_url = reverse_lazy('home')
@@ -152,6 +170,7 @@ class AddPostView(LoginRequiredMixin, DataMixin, CreateView):
         post = form.save(commit=False)
         post.author = Author.objects.get(author_user=self.request.user)
         return super().form_valid(form)
+
 
 class AddReplyView(DataMixin, View):
     form_class = AddReplyForm
