@@ -1,0 +1,40 @@
+{% extends 'bboard/base.html' %}
+
+{% block content %}
+<form action="" method="get">
+    {{ filterset.form.as_p }}
+    {{ form.as_p.media }}
+    <input type="submit" value="Поиск" />
+</form>
+
+ <p><a href="?{% url 'replies_list_search' %}">Очистить</a></p>
+
+{% if finded_replies %}
+    <table cellpadding="2" frame="hsides">
+        <caption align="top"> <h4>Найденные объявления</h4></caption>
+        <tr>
+            <th>Номер</th>
+            <th>Автор</th>
+            <th>Объявление</th>
+            <th>Текст</th>
+            <th>Дата создания</th>
+            <th>Дата обновления</th>
+            <th>Разрешено</th>
+        </tr>
+        {% for reply in finded_replies %}
+        <tr>
+            <td align="left">{{ reply.pk }}</td>
+            <td align="left">{{ reply.author }}</td>
+            <td align="left">{{ reply.post }}</td>
+            <td align="left">{{ reply.text }}</td>
+            <td>{{ reply.time_create|date:'d.M.Y' }}</td>
+            <td>{{ reply.time_update|date:'d.M.Y' }}</td>
+            <td>{{ reply.is_approved }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <h3>Ничего не найдено</h3>
+{% endif %}
+
+{% endblock content %}

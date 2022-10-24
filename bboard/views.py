@@ -7,12 +7,33 @@ from django.views import View
 from .forms import PostForm, AddReplyForm
 from .models import *
 from .utils import *
+from .filters import *
 
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
+
+class RepliesListSearchView(DataMixin, ListView):
+    """Представление возвращает форму поиска со списком публикаций - результатом поиска"""
+    model = Reply
+    ordering = '-time_create'
+    template_name = 'replies_search.html'
+    context_object_name = 'finded_replies'
+    paginate_by = 3 # Переопределим
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = PostFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['filterset'] = self.filterset
+        c_def = self.get_user_context(title="Поиск откликов:")
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
 
 
 class PostUpdate(DataMixin, UpdateView):
