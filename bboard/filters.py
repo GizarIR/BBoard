@@ -31,6 +31,7 @@ class PostFilter(FilterSet):
     for_is_approved = BooleanFilter(
         field_name='is_approved',
         label='Разрешено ',
+        widget= django.forms.CheckboxInput(attrs={'checked': 'checked'}),
     )
 
     # Создадим на странице фильтр дат, для его отрисовки используем виджет

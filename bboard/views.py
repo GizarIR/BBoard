@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
+from django.shortcuts import get_list_or_404, get_object_or_404
+
 
 
 from .forms import PostForm, AddReplyForm
@@ -14,6 +16,14 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
+
+
+def change_approved(request, reply_pk):
+    reply = get_object_or_404(Reply, pk=reply_pk)
+    reply.is_approved = False if reply.is_approved else True
+    reply.save()
+    return redirect('replies_list_search')
+
 
 class RepliesListSearchView(DataMixin, ListView):
     """Представление возвращает форму поиска со списком публикаций - результатом поиска"""

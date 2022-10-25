@@ -34,6 +34,7 @@ urlpatterns = [
     path('reply/<int:pk>/', ReplyDetail.as_view(), name='reply'),
     path('addreply/<slug:post_slug>/', AddReplyView.as_view(), name='add_reply'),
     path('lk/', RepliesListSearchView.as_view(), name='replies_list_search'),
+    path('lk/<int:reply_pk>/change_approved/', change_approved, name='change_approved'),
 
 ]
 

@@ -3,7 +3,6 @@
 {% block content %}
 <form action="" method="get">
     {{ filterset.form.as_p }}
-    {{ form.as_p.media }}
     <input type="submit" value="Поиск" />
 </form>
 
@@ -25,11 +24,19 @@
         <tr>
             <td align="left">{{ reply.pk }}</td>
             <td align="left">{{ reply.author }}</td>
-            <td align="left">{{ reply.post }}</td>
+            <td align="left"><a href="{{ reply.post.get_absolute_url }}">{{ reply.post }}</a></td>
             <td align="left">{{ reply.text }}</td>
             <td>{{ reply.time_create|date:'d.M.Y' }}</td>
             <td>{{ reply.time_update|date:'d.M.Y' }}</td>
-            <td>{{ reply.is_approved }}</td>
+            <td>
+                <form method="post" action="{% url 'change_approved' reply.pk %}">
+                    {% if reply.is_approved %}
+                        <input type="checkbox" checked />
+                    {% else %}
+                        <input type="checkbox"  />
+                    {% endif %}
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>
