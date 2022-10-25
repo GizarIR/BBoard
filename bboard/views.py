@@ -36,7 +36,7 @@ class RepliesListSearchView(DataMixin, ListView):
     ordering = '-time_create'
     template_name = 'replies_search.html'
     context_object_name = 'finded_replies'
-    paginate_by = 3 # Переопределим
+    paginate_by = 5 # Переопределим
 
     def get_queryset(self):
         queryset = super().get_queryset()
