@@ -1,6 +1,6 @@
 from django_filters import CharFilter, ModelChoiceFilter, ModelMultipleChoiceFilter, DateFilter, BooleanFilter
 from django_filters import FilterSet
-from .models import Post, Author
+from .models import Post, Author, Reply
 import django.forms
 
 
@@ -31,7 +31,7 @@ class PostFilter(FilterSet):
     for_is_approved = BooleanFilter(
         field_name='is_approved',
         label='Разрешено ',
-        widget= django.forms.CheckboxInput(attrs={'checked': 'checked'}),
+        # empty_label = 'Все',
     )
 
     # Создадим на странице фильтр дат, для его отрисовки используем виджет

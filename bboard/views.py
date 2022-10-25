@@ -18,6 +18,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 
 
+def reply_delete(request, reply_pk):
+    reply = get_object_or_404(Reply, pk=reply_pk)
+    reply.delete()
+    return redirect('replies_list_search')
+
 def change_approved(request, reply_pk):
     reply = get_object_or_404(Reply, pk=reply_pk)
     reply.is_approved = False if reply.is_approved else True
@@ -35,11 +40,13 @@ class RepliesListSearchView(DataMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        # print(queryset)
         self.filterset = PostFilter(self.request.GET, queryset)
         return self.filterset.qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
+        # print(context)
         context['filterset'] = self.filterset
         c_def = self.get_user_context(title="Поиск откликов:")
         context = dict(list(context.items()) + list(c_def.items()))

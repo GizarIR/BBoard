@@ -19,6 +19,7 @@
             <th>Дата создания</th>
             <th>Дата обновления</th>
             <th>Разрешено</th>
+            <th>Удалить</th>
         </tr>
         {% for reply in finded_replies %}
         <tr>
@@ -29,12 +30,16 @@
             <td>{{ reply.time_create|date:'d.M.Y' }}</td>
             <td>{{ reply.time_update|date:'d.M.Y' }}</td>
             <td>
-                <form method="post" action="{% url 'change_approved' reply.pk %}">
-                    {% if reply.is_approved %}
-                        <input type="checkbox" checked />
-                    {% else %}
-                        <input type="checkbox"  />
-                    {% endif %}
+                {% if reply.is_approved %}
+                    <a href="{% url 'change_approved' reply.pk %}" title = 'Нажми, чтобы изменить значение на "Нет"'>Да</a>
+                {% else %}
+                    <a href="{% url 'change_approved' reply.pk %}" title = 'Нажми, чтобы изменить значение на "Да"'>Нет</a>
+                {% endif%}
+                </form>
+            </td>
+            <td>
+                <form action="{% url 'reply_delete' reply.pk %}" method="delete">
+                    <button>Удалить</button>
                 </form>
             </td>
         </tr>

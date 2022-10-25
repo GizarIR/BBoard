@@ -35,6 +35,7 @@ urlpatterns = [
     path('addreply/<slug:post_slug>/', AddReplyView.as_view(), name='add_reply'),
     path('lk/', RepliesListSearchView.as_view(), name='replies_list_search'),
     path('lk/<int:reply_pk>/change_approved/', change_approved, name='change_approved'),
+    path('lk/<int:reply_pk>/reply_delete/', reply_delete, name='reply_delete'),
 
 ]
 
