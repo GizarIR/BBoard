@@ -53,7 +53,7 @@ class RepliesListSearchView(DataMixin, ListView):
         return context
 
 
-class PostUpdate(DataMixin, UpdateView):
+class PostUpdate(LoginRequiredMixin, DataMixin, UpdateView):
     """Представление возвращает форму редактирования статьи"""
     form_class = PostForm
     model = Post
@@ -210,7 +210,7 @@ class AddPostView(LoginRequiredMixin, DataMixin, CreateView):
         return super().form_valid(form)
 
 
-class AddReplyView(DataMixin, View):
+class AddReplyView(LoginRequiredMixin, DataMixin, View):
     form_class = AddReplyForm
     # initial = {'post_id': ''}
     template_name = 'bboard/reply_add.html'
