@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'crispy_forms',
+    'sign.apps.SignConfig',
     'bboard.apps.BboardConfig',
     # End Added for project (End AFP)
 ]
@@ -70,7 +71,11 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'bboard/templates/bboard')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'bboard/templates/bboard'),
+            os.path.join(BASE_DIR, 'sign/templates/sign')
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -164,4 +169,8 @@ CKEDITOR_CONFIGS = {
             ]}],
     },
 }
+
+LOGIN_URL = 'sign/login/'
+LOGIN_REDIRECT_URL = '/'
+
 # End AFP
