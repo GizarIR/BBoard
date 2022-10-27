@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include('bboard.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('sign/', include('sign.urls')),
+    path('accounts/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:

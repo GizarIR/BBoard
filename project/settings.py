@@ -46,6 +46,12 @@ INSTALLED_APPS = [
     'crispy_forms',
     'sign.apps.SignConfig',
     'bboard.apps.BboardConfig',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # ... include the providers you want to enable:
+    'allauth.socialaccount.providers.google',
     # End Added for project (End AFP)
 ]
 
@@ -84,6 +90,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # `allauth` needs this from django
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -171,7 +180,25 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-LOGIN_URL = 'sign/login/'
+# LOGIN_URL = 'sign/login/'
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none' # отключено - полный функционал только после подтверждения по почте
+
 # End AFP
+
+# id 535930055625-tl37sf2m9ani7q5fkedihh92clsaqmmm.apps.googleusercontent.com
+# secret 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
