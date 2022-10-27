@@ -199,6 +199,3 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none' # отключено - полный функционал только после подтверждения по почте
 
 # End AFP
-
-# id 535930055625-tl37sf2m9ani7q5fkedihh92clsaqmmm.apps.googleusercontent.com
-# secret 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

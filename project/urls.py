@@ -27,8 +27,8 @@ urlpatterns = [
     path('pages/', include('django.contrib.flatpages.urls')),
     path('', include('bboard.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('sign/', include('sign.urls')),
     path('accounts/', include('allauth.urls')),
+    path('sign/', include('sign.urls')),
 ]
 
 if settings.DEBUG:

@@ -79,8 +79,6 @@ def about(request):
 def contact(request):
     return HttpResponse("Обратная связь")
 
-def login(request):
-    return HttpResponse("Авторизация")
 
 # def index(request):
 #     posts = Post.objects.all()

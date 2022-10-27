@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 from django.views.generic.edit import CreateView
+from project import settings
 
 
 from .forms import BaseRegisterForm
@@ -22,13 +23,8 @@ class BaseRegisterView(DataMixin, CreateView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-# class LoginViewMix(DataMixin, LoginView):
-#     template_name = 'sign/login.html'
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         c_def = self.get_user_context(title="Авторизация")
-#         return dict(list(context.items()) + list(c_def.items()))
+def login_mix(request):
+    return redirect('account_login')
 
 
 class LoginViewMix(DataMixin, LoginView):
