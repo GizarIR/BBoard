@@ -29,6 +29,10 @@ ALLOWED_HOSTS = []
 
 #AFP
 AUTH_USER_MODEL='bboard.User'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
 #End AFP
 
 # Application definition

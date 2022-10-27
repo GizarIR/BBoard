@@ -3,7 +3,7 @@
 		{% for rep in replies %}
 			<li>
 				<div class="article-panel">
-					<p class="first">Автор: {{ rep.author }}</p>
+					<p class="first">Автор: {{ rep.user }}</p>
 					<p class="last">Дата: {{rep.time_update|date:"d-m-Y H:i:s"}}</p>
 				</div>
 				<div>

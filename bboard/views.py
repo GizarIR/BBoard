@@ -234,7 +234,7 @@ class AddReplyView(DataMixin, View):
             # <process form cleaned data>
             # print(reply['is_approved'])
             Reply.objects.create(
-                author = Author.objects.get(author_user=self.request.user),
+                user = User.objects.get(username=self.request.user),
                 post = Post.objects.get(slug=post_slug),
                 text = reply['text'],
                 is_approved = True
