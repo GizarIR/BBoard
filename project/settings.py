@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # Added for project (AFP)
     'django.contrib.sites',
     'django.contrib.flatpages',
