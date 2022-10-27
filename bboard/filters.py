@@ -1,6 +1,6 @@
 from django_filters import CharFilter, ModelChoiceFilter, ModelMultipleChoiceFilter, DateFilter, BooleanFilter
 from django_filters import FilterSet
-from .models import Post, Author, Reply
+from .models import Post, User
 import django.forms
 
 
@@ -13,9 +13,9 @@ class PostFilter(FilterSet):
 
     # Автор
     from_author = ModelChoiceFilter(
-        field_name='author',
-        queryset=Author.objects.all(),
-        label='Автор ',
+        field_name='username',
+        queryset=User.objects.all(),
+        label='Пользователь ',
         empty_label='Любое',  # любая
     )
 

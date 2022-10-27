@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#AFP
+AUTH_USER_MODEL='bboard.User'
+#End AFP
 
 # Application definition
 
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'crispy_forms',
+    'users',
     'bboard.apps.BboardConfig',
     # End Added for project (End AFP)
 ]

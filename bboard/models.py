@@ -1,35 +1,42 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.template.defaultfilters import slugify
 # from tinymce import models as tinymce_models
 from django.urls import reverse
+
 from unidecode import unidecode
-# from uuslug import uuslug)
 from ckeditor_uploader.fields import RichTextUploadingField
 
-# Create your models here.
+
+# class Author(models.Model):
+#     """
+#     Модель Author - объекты всех авторов, поля:
+#         - cвязь «один к одному», с встроенной моделью пользователей User;
+#     """
+#     author_user = models.OneToOneField(
+#         User,
+#         on_delete=models.CASCADE,
+#         verbose_name="Автор",
+#     )
+#     one_time_code = models.CharField(max_length=255)
+#     time_created = models.DateTimeField(auto_now_add=True)
+#
+#     def __str__(self):
+#         return f'{self.author_user.username}'
+#
+#     class Meta:
+#         verbose_name = 'Автор'
+#         verbose_name_plural = 'Авторы'
 
 
-class Author(models.Model):
-    """
-    Модель Author - объекты всех авторов, поля:
-        - cвязь «один к одному», с встроенной моделью пользователей User;
-    """
-    author_user = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name="Автор",
-    )
-    one_time_code = models.CharField(max_length=255)
-    time_created = models.DateTimeField(auto_now_add=True)
+class User(AbstractUser):
 
     def __str__(self):
-        return f'{self.author_user.username}'
+        return f'{self.username}'
 
     class Meta:
-        verbose_name = 'Автор'
-        verbose_name_plural = 'Авторы'
-
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
 class Category(models.Model):
     """
@@ -57,7 +64,7 @@ class Category(models.Model):
 
 
 class Reply(models.Model):
-    author = models.ForeignKey('Author', on_delete=models.CASCADE, verbose_name="Автор")
+    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name="Пользователь")
     post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name="Пост")
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
@@ -80,12 +87,11 @@ class Post(models.Model):
     title = models.CharField(max_length=255, verbose_name="Заголовок")
     content = RichTextUploadingField(blank=True, default='', verbose_name="Текст")
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name="Категория")
-    author = models.ForeignKey('Author', on_delete=models.CASCADE, verbose_name="Автор")
+    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name="Пользователь")
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name="Фото заголовка", blank=True, null=True)
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
     is_created = models.BooleanField(default=True)
-    # replies = models.ForeignKey('Reply', on_delete=models.CASCADE, verbose_name="Отклики", blank=True, null=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
     is_published = models.BooleanField(default=True, verbose_name="Опубликовать")
 
