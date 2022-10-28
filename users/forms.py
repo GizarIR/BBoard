@@ -28,6 +28,9 @@ class MyAuthenticationForm(DjangoAuthenticationForm):
                 username=username,
                 password=password
             )
+            if self.user_cache is None:
+                raise self.get_invalid_login_error()
+
             if not self.user_cache.email_verify:
                 clear_old_code(self.user_cache)
                 send_email_for_verify(self.request, self.user_cache)
@@ -35,10 +38,8 @@ class MyAuthenticationForm(DjangoAuthenticationForm):
                     'Ваш email не подтвержден, вам повторно отправлен email c кодом, проверьте Ваш email и следуйте инструкциям',
                     code="invalid_login",
                 )
-            if self.user_cache is None:
-                raise self.get_invalid_login_error()
-            else:
-                self.confirm_login_allowed(self.user_cache)
+
+            self.confirm_login_allowed(self.user_cache)
 
         return self.cleaned_data
 
