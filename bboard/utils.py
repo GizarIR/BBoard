@@ -7,6 +7,7 @@ menu = [{'title': "Главная", 'url_name': 'home'},
         {'title': "Личный кабинет", 'url_name': 'replies_list_search'},
         {'title': "Выйти", 'url_name': 'logout'},
         {'title': "Войти", 'url_name': 'login'},
+        # {'title': "Зарегистрироваться", 'url_name': 'register'},
         ]
 
 

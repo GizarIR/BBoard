@@ -1,12 +1,17 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
+
 from .models import *
-from unidecode import unidecode
+
+User = get_user_model()
 
 
-# class UserAdmin(admin.ModelAdmin):
-#     list_display = ['user',]
-#     list_filter = ['user',]
-#     search_fields = ['user',]
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    # pass
+    list_display = ['username', 'is_staff']
+    list_filter = ['username',]
+    search_fields = ['username',]
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = [
@@ -46,7 +51,8 @@ class ReplyAdmin(admin.ModelAdmin):
     search_fields = ['text',]
     list_per_page = 10
 
-# admin.site.register(User, UserAdmin)
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Reply, ReplyAdmin)
