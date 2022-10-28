@@ -51,9 +51,18 @@ class ReplyAdmin(admin.ModelAdmin):
     search_fields = ['text',]
     list_per_page = 10
 
+
+class OneTimeCodeAdmin(admin.ModelAdmin):
+    list_display = [
+        'code',
+        'user',
+    ]
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Reply, ReplyAdmin)
+admin.site.register(OneTimeCode, OneTimeCodeAdmin)
+
 

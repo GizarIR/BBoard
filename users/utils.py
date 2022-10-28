@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
@@ -6,6 +8,14 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 
 
+from bboard.models import OneTimeCode
+
+
+def generate_code(user):
+    code = ''.join(random.choices('0123456789', k=4))
+    OneTimeCode.objects.create(code=code, user=user)
+    return code
+
 def send_email_for_verify(request, user):
     current_site = get_current_site(request)
     context = {
@@ -13,6 +23,7 @@ def send_email_for_verify(request, user):
         'domain': current_site,
         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
         "token": token_generator.make_token(user),
+        "code": generate_code(user),
     }
     message = render_to_string(
         'registration/verify_email.html',
