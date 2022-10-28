@@ -9,7 +9,7 @@ User = get_user_model()
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     # pass
-    list_display = ['username', 'is_staff']
+    list_display = ['username', 'is_staff', 'email_verify']
     list_filter = ['username',]
     search_fields = ['username',]
 

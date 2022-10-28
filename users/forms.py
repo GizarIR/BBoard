@@ -8,12 +8,12 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from .utils import send_email_for_verify
+from .utils import send_email_for_verify, clear_old_code
 
 User = get_user_model()
 
 class EmailVerifyForm(forms.Form):
-    text = forms.CharField(max_length=12, label='одноразовый код')
+    code = forms.CharField(max_length=12, label='одноразовый код')
 
 
 class MyAuthenticationForm(DjangoAuthenticationForm):
@@ -29,9 +29,10 @@ class MyAuthenticationForm(DjangoAuthenticationForm):
                 password=password
             )
             if not self.user_cache.email_verify:
+                clear_old_code(self.user_cache)
                 send_email_for_verify(self.request, self.user_cache)
                 raise ValidationError(
-                    'Ваш email не подтвержден, проверьте Ваш email',
+                    'Ваш email не подтвержден, вам повторно отправлен email c кодом, проверьте Ваш email и следуйте инструкциям',
                     code="invalid_login",
                 )
             if self.user_cache is None:

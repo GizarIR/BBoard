@@ -12,7 +12,7 @@ from django.contrib.auth.tokens import default_token_generator as token_generato
 from .forms import MyUserCreationForm, MyAuthenticationForm, EmailVerifyForm
 
 from bboard.utils import DataMixin
-from .utils import send_email_for_verify
+from .utils import send_email_for_verify, check_code, clear_old_code
 
 
 User = get_user_model()
@@ -37,15 +37,20 @@ class EmailVerify(DataMixin, View):
         }
         return render(request, self.template_name, context)
 
-    # def post-oldget(self, request, uidb64, token):
-    #     user = self.get_user(uidb64)
-    #     if user is not None and token_generator.check_token(user, token):
-    #         user.email_verify = True
-    #         user.save()
-    #         login(request, user)
-    #         return redirect('home')
-    #     return redirect('invalid_verify')
+    def post(self, request, uidb64, token):
+        user = self.get_user(uidb64)
+        form = EmailVerifyForm(request.POST)
 
+        if form.is_valid():
+            if user is not None and token_generator.check_token(user, token):
+                code = form.cleaned_data.get('code')
+                if check_code(code, user):
+                    user.email_verify = True
+                    user.save()
+                    login(request, user)
+                    return redirect('home')
+        # else: иначе если форма не валидная нужно вернуть форму с ошибками
+        return redirect('invalid_verify')
 
     @staticmethod
     def get_user(uidb64):
@@ -78,10 +83,6 @@ class Register(DataMixin, View):
     template_name = 'registration/register.html'
 
     def get(self, request):
-        # context = {
-        #     'form': UserCreationForm
-        # }
-        # form = self.form_class()
         categories = self.get_user_context()['categories']
         menu = self.get_user_context()['menu']
         cat_selected = self.get_user_context()['cat_selected']
@@ -98,15 +99,11 @@ class Register(DataMixin, View):
         form = MyUserCreationForm(request.POST)
 
         if form.is_valid():  # если данные в форме правильные
-            form.save()  # сохраним пользователя
-            # username = form.cleaned_data.get('username')  # получим из сохраненных данных логин и пароль
-            email = form.cleaned_data.get('email')  # передалаем на email (в моделях тоже внесли изменения)
+            form.save()  # сохраним форму и пользователя
+            email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password1')
-            user = authenticate(email=email, password=password)  # аутентифицируем его (поменяли на email)
-            # # для логирования пользователя без подтверждения емейла используй код ниже
-            # login(request, user)  # залогиним на портал
-            # return redirect('home')  # перенесем на главную страницу
-            # для реализации подтверждения пользовательского емейла используй код нижже
+            user = authenticate(email=email, password=password)
+            clear_old_code(user)
             send_email_for_verify(request, user)
             return redirect('confirm_email')
         # else: иначе если форма не валидная нужно вернуть форму с ошибками

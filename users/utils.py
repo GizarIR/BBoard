@@ -11,6 +11,19 @@ from django.core.mail import EmailMessage
 from bboard.models import OneTimeCode
 
 
+def clear_old_code(user):
+    OneTimeCode.objects.filter(user=user).delete()
+
+
+def check_code(code, user):
+    if user is not None and OneTimeCode.objects.filter(user=user).exists():
+        print(user)
+        print(code)
+        print(OneTimeCode.objects.get(user=user).code)
+        if code == OneTimeCode.objects.get(user=user).code:
+            return True
+    return False
+
 def generate_code(user):
     code = ''.join(random.choices('0123456789', k=4))
     OneTimeCode.objects.create(code=code, user=user)
@@ -30,7 +43,7 @@ def send_email_for_verify(request, user):
         context=context,
     )
     email=EmailMessage(
-        'Verify email',
+        'Подтвердите свой email',
         message,
         to=[user.email],
     )
