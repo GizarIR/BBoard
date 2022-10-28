@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
@@ -6,13 +8,13 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 
 
-from bboard.models import *
+from project.bboard.models import OneTimeCode
 
 def check_code(user, code):
     pass
 
 def generate_code(user):
-    pass
+    OneTimeCode.objects.create(code=random.choice('1234567890'), user=user)
 
 def send_email_for_verify(request, user):
     context = {
@@ -20,11 +22,11 @@ def send_email_for_verify(request, user):
         "code": generate_code(user),
     }
     message = render_to_string(
-        'registration/verify_email.html',
+        'registration/verify_code_email.html',
         context=context,
     )
     email=EmailMessage(
-        'Verify email',
+        'Код подтверждения email',
         message,
         to=[user.email],
     )

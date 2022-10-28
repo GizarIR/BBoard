@@ -9,17 +9,73 @@ from django.views import View
 from django.contrib.auth.tokens import default_token_generator as token_generator
 
 
-from .forms import MyUserCreationForm, MyAuthenticationForm
+from .forms import MyUserCreationForm, MyAuthenticationForm, ConfirmEmailForm
 
 from bboard.utils import DataMixin
 from .utils import send_email_for_verify, check_code
 
 User = get_user_model()
 
-class EmailVerify(View):
+# class EmailVerify(View):
+#
+#     def get(self, request, uidb64, token):
+#         user = self.get_user(uidb64)
+#
+#         # # Проверка при реализации проверки емейла через ссылку
+#         # if user is not None and token_generator.check_token(user, token):
+#         #     user.email_verify = True
+#         #     user.save()
+#         #     login(request, user)
+#         #     return redirect('home')
+#         # return redirect('invalid_verify')
+#
+#         # Проверка при реализации проверки емейла через code
+#
+#
+#         if user is not None and check_code(user, code):
+#             user.email_verify = True
+#             user.save()
+#             login(request, user)
+#             return redirect('home')
+#         return redirect('invalid_verify')
+#
+#
+#     @staticmethod
+#     def get_user(uidb64):
+#         try:
+#             # urlsafe_base64_decode() decodes to bytestring
+#             uid = urlsafe_base64_decode(uidb64).decode()
+#             user = User.objects.get(pk=uid)
+#         except (
+#             TypeError,
+#             ValueError,
+#             OverflowError,
+#             User.DoesNotExist,
+#             ValidationError,
+#         ):
+#             user = None
+#         return user
 
-    def get(self, request, uidb64, token):
-        user = self.get_user(uidb64)
+class ConfirmEmail(DataMixin,View):
+    form_class = ConfirmEmailForm
+    template_name = 'registration/confirm_email.html'
+
+    def get(self, request):
+        form = self.form_class()
+        user = self.get_user()
+        categories = self.get_user_context()['categories']
+        menu = self.get_user_context()['menu']
+        cat_selected = self.get_user_context()['cat_selected']
+        # print(post_slug)
+        context = {
+            'form': MyUserCreationForm,
+            'menu': menu,
+            'categories': categories,
+            'cat_selected': cat_selected,
+        }
+        return render(request, self.template_name, context)
+
+
 
         # # Проверка при реализации проверки емейла через ссылку
         # if user is not None and token_generator.check_token(user, token):
@@ -32,12 +88,6 @@ class EmailVerify(View):
         # Проверка при реализации проверки емейла через code
 
 
-        if user is not None and check_code(user, code):
-            user.email_verify = True
-            user.save()
-            login(request, user)
-            return redirect('home')
-        return redirect('invalid_verify')
 
 
     @staticmethod
@@ -55,6 +105,7 @@ class EmailVerify(View):
         ):
             user = None
         return user
+
 
 class MyLoginView(DataMixin,DjangoLoginView):
     form_class = MyAuthenticationForm
