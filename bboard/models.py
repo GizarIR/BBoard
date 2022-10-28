@@ -29,6 +29,19 @@ from django.utils.translation import gettext_lazy as _
 #         verbose_name = 'Автор'
 #         verbose_name_plural = 'Авторы'
 
+class OneTimeCode(models.Model):
+    code = models.CharField(
+        max_length=12,
+        verbose_name='Одноразовый код',
+    )
+    user = models.ForeignKey(
+        'User',
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь")
+    class Meta:
+        verbose_name = 'Одноразовый код'
+        verbose_name_plural = 'Одноразовые коды'
+
 
 class User(AbstractUser):
     email = models.EmailField(
