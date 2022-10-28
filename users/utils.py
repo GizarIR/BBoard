@@ -6,13 +6,18 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 
 
+from bboard.models import *
+
+def check_code(user, code):
+    pass
+
+def generate_code(user):
+    pass
+
 def send_email_for_verify(request, user):
-    current_site = get_current_site(request)
     context = {
         'user': user,
-        'domain': current_site,
-        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-        "token": token_generator.make_token(user),
+        "code": generate_code(user),
     }
     message = render_to_string(
         'registration/verify_email.html',

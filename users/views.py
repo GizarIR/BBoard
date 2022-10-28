@@ -12,8 +12,7 @@ from django.contrib.auth.tokens import default_token_generator as token_generato
 from .forms import MyUserCreationForm, MyAuthenticationForm
 
 from bboard.utils import DataMixin
-from .utils import send_email_for_verify
-
+from .utils import send_email_for_verify, check_code
 
 User = get_user_model()
 
@@ -22,7 +21,18 @@ class EmailVerify(View):
     def get(self, request, uidb64, token):
         user = self.get_user(uidb64)
 
-        if user is not None and token_generator.check_token(user, token):
+        # # Проверка при реализации проверки емейла через ссылку
+        # if user is not None and token_generator.check_token(user, token):
+        #     user.email_verify = True
+        #     user.save()
+        #     login(request, user)
+        #     return redirect('home')
+        # return redirect('invalid_verify')
+
+        # Проверка при реализации проверки емейла через code
+
+
+        if user is not None and check_code(user, code):
             user.email_verify = True
             user.save()
             login(request, user)

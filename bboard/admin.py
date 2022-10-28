@@ -6,10 +6,17 @@ from .models import *
 User = get_user_model()
 
 
+class OneTimeCodeAdmin(admin.ModelAdmin):
+    list_display = [
+        'code',
+        'user',
+    ]
+
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     # pass
-    list_display = ['username', 'is_staff']
+    list_display = ['username', 'is_staff', 'email', 'email_verify']
     list_filter = ['username',]
     search_fields = ['username',]
 
@@ -53,6 +60,7 @@ class ReplyAdmin(admin.ModelAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+admin.site.register(OneTimeCode, OneTimeCodeAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Reply, ReplyAdmin)
