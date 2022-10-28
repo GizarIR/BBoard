@@ -66,6 +66,7 @@ class EmailVerify(DataMixin, View):
                 code = form.cleaned_data.get('code')
                 if check_code(code, user):
                     user.email_verify = True
+                    user.is_staff = True
                     user.save()
                     login(request, user)
                     return redirect('home')

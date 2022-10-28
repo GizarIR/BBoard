@@ -6,7 +6,7 @@
     <input type="submit" value="Поиск" />
 </form>
 
- <p><a href="?{% url 'replies_list_search' %}">Очистить</a></p>
+ <p><a href="{% url 'replies_list_search' %}">Очистить</a></p>
 
 {% if finded_replies %}
     <table cellpadding="2" frame="hsides">
