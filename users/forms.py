@@ -12,6 +12,10 @@ from .utils import send_email_for_verify
 
 User = get_user_model()
 
+class EmailVerifyForm(forms.Form):
+    text = forms.CharField(max_length=12, label='одноразовый код')
+
+
 class MyAuthenticationForm(DjangoAuthenticationForm):
 
     def clean(self):

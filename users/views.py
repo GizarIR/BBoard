@@ -9,7 +9,7 @@ from django.views import View
 from django.contrib.auth.tokens import default_token_generator as token_generator
 
 
-from .forms import MyUserCreationForm, MyAuthenticationForm
+from .forms import MyUserCreationForm, MyAuthenticationForm, EmailVerifyForm
 
 from bboard.utils import DataMixin
 from .utils import send_email_for_verify
@@ -17,17 +17,34 @@ from .utils import send_email_for_verify
 
 User = get_user_model()
 
-class EmailVerify(View):
+class EmailVerify(DataMixin, View):
+    template_name='registration/verify_email_form.html'
 
     def get(self, request, uidb64, token):
         user = self.get_user(uidb64)
 
-        if user is not None and token_generator.check_token(user, token):
-            user.email_verify = True
-            user.save()
-            login(request, user)
-            return redirect('home')
-        return redirect('invalid_verify')
+        categories = self.get_user_context()['categories']
+        menu = self.get_user_context()['menu']
+        cat_selected = self.get_user_context()['cat_selected']
+        context = {
+            'user': user,
+            'uid': uidb64,
+            'token':token,
+            'form': EmailVerifyForm,
+            'menu': menu,
+            'categories': categories,
+            'cat_selected': cat_selected,
+        }
+        return render(request, self.template_name, context)
+
+    # def post-oldget(self, request, uidb64, token):
+    #     user = self.get_user(uidb64)
+    #     if user is not None and token_generator.check_token(user, token):
+    #         user.email_verify = True
+    #         user.save()
+    #         login(request, user)
+    #         return redirect('home')
+    #     return redirect('invalid_verify')
 
 
     @staticmethod
