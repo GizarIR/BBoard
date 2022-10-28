@@ -1,16 +1,16 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView as DjangoLoginView
 # from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 
-from users.forms import UserCreationForm
+from users.forms import MyUserCreationForm
 
 from bboard.utils import DataMixin
 
 
-class LoginView(DataMixin,LoginView):
+class MyLoginView(DataMixin,DjangoLoginView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title="Вход на портал")
@@ -32,16 +32,15 @@ class Register(DataMixin, View):
         cat_selected = self.get_user_context()['cat_selected']
         # print(post_slug)
         context = {
-            'form': UserCreationForm,
+            'form': MyUserCreationForm,
             'menu': menu,
             'categories': categories,
-            'cat_selected':cat_selected,
-            # 'post_slug': post_slug
+            'cat_selected': cat_selected,
         }
         return render(request, self.template_name, context)
 
     def post(self, request):
-        form = UserCreationForm(request.POST)
+        form = MyUserCreationForm(request.POST)
 
         if form.is_valid():  # если данные в форме правильные
             form.save()  # сохраним пользователя
@@ -56,5 +55,3 @@ class Register(DataMixin, View):
             'form': form,
         }
         return render(request, self.template_name, context)
-
-
