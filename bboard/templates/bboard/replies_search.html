@@ -16,7 +16,6 @@
             <th>Автор</th>
             <th>Объявление</th>
             <th>Текст</th>
-            <th>Дата создания</th>
             <th>Дата обновления</th>
             <th>Разрешено</th>
             <th>Удалить</th>
@@ -27,7 +26,6 @@
             <td align="left">{{ reply.user }}</td>
             <td align="left"><a href="{{ reply.post.get_absolute_url }}">{{ reply.post }}</a></td>
             <td align="left">{{ reply.text }}</td>
-            <td>{{ reply.time_create|date:'d.M.Y' }}</td>
             <td>{{ reply.time_update|date:'d.M.Y' }}</td>
             <td>
                 {% if reply.is_approved %}

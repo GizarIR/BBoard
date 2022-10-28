@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.urls import reverse_lazy
 from django.views import View
 from django.shortcuts import get_list_or_404, get_object_or_404
-
+from django.db.models import Q
 
 
 from .forms import PostForm, AddReplyForm
@@ -162,7 +162,11 @@ class PostsView(DataMixin, ListView):
     # Добавим параметры выборки данных для шаблонов
     # отображаем только те что опубликованы
     def get_queryset(self):
-        return Post.objects.filter(is_published=True).order_by('-time_update')
+        if not self.request.user.is_authenticated:
+            qs = Post.objects.filter(is_published=True).order_by('-time_update')
+        else:
+            qs = Post.objects.filter(Q(is_published=True) | Q(user=self.request.user)).order_by('-time_update')
+        return qs
 
 class PostsCategoryView(DataMixin, ListView):
     model = Category
