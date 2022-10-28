@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <p>{{ user }} Пожалуйста введите одноразовый код, чтобы закончить регистрацию:</p>
+    <p>Пожалуйста введите одноразовый код, чтобы закончить регистрацию:</p>
    <form action="{% url 'verify_email' uidb64=uid token=token %}" method="post">
      {% csrf_token %}
      {{ form.as_p }}

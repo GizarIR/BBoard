@@ -17,9 +17,6 @@ def clear_old_code(user):
 
 def check_code(code, user):
     if user is not None and OneTimeCode.objects.filter(user=user).exists():
-        print(user)
-        print(code)
-        print(OneTimeCode.objects.get(user=user).code)
         if code == OneTimeCode.objects.get(user=user).code:
             return True
     return False

@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.utils.http import urlsafe_base64_decode
 from django.views import View
 from django.contrib.auth.tokens import default_token_generator as token_generator
-
+from django.views.generic import TemplateView
 
 from .forms import MyUserCreationForm, MyAuthenticationForm, EmailVerifyForm
 
@@ -17,12 +17,32 @@ from .utils import send_email_for_verify, check_code, clear_old_code
 
 User = get_user_model()
 
+
+class InvalidVerifyView(DataMixin, TemplateView):
+    template_name='registration/invalid_verify.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Некорректная ссылка или введенный код")
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
+
+
+class ConfirmEmailView(DataMixin, TemplateView):
+    template_name='registration/confirm_email.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Проверьте Ваш email")
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
+
+
 class EmailVerify(DataMixin, View):
     template_name='registration/verify_email_form.html'
 
     def get(self, request, uidb64, token):
         user = self.get_user(uidb64)
-
         categories = self.get_user_context()['categories']
         menu = self.get_user_context()['menu']
         cat_selected = self.get_user_context()['cat_selected']
