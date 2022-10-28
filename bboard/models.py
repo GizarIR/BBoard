@@ -6,6 +6,7 @@ from django.urls import reverse
 
 from unidecode import unidecode
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.utils.translation import gettext_lazy as _
 
 
 # class Author(models.Model):
@@ -30,6 +31,13 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class User(AbstractUser):
+    email = models.EmailField(
+        _("email address"),
+        unique=True
+    )
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
 
     def __str__(self):
         return f'{self.username}'
