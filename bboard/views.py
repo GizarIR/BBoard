@@ -206,7 +206,7 @@ class AddPostView(LoginRequiredMixin, DataMixin, CreateView):
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        post.author = Author.objects.get(author_user=self.request.user)
+        post.user = User.objects.get(username=self.request.user)
         return super().form_valid(form)
 
 
