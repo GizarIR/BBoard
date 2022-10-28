@@ -12,12 +12,12 @@ class PostFilter(FilterSet):
     )
 
     # Автор
-    from_author = ModelChoiceFilter(
-        field_name='username',
-        queryset=User.objects.all(),
-        label='Пользователь ',
-        empty_label='Любое',  # любая
-    )
+    # from_author = ModelChoiceFilter(
+    #     field_name='username',
+    #     queryset=User.objects.all(),
+    #     label='Пользователь ',
+    #     empty_label='Любое',  # любая
+    # )
 
     # Публикация
     for_post =  ModelMultipleChoiceFilter(
@@ -54,7 +54,7 @@ class PostFilter(FilterSet):
          Если нет других описаний полей поиска, то поля отрисуются автоматически cjukfсно описанию в даном классе"""
         model = Post
         fields = [
-            'from_author', # в задании не требуется
+            # 'from_author', # в задании не требуется
             'for_post',
             'reply__icontains',
             "for_is_approved",

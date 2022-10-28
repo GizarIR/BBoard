@@ -24,7 +24,7 @@
         {% for reply in finded_replies %}
         <tr>
             <td align="left">{{ reply.pk }}</td>
-            <td align="left">{{ reply.author }}</td>
+            <td align="left">{{ reply.user }}</td>
             <td align="left"><a href="{{ reply.post.get_absolute_url }}">{{ reply.post }}</a></td>
             <td align="left">{{ reply.text }}</td>
             <td>{{ reply.time_create|date:'d.M.Y' }}</td>

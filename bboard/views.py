@@ -40,7 +40,7 @@ class RepliesListSearchView(DataMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        # print(queryset)
+        queryset = queryset.filter(post__user=self.request.user)
         self.filterset = PostFilter(self.request.GET, queryset)
         return self.filterset.qs
 
