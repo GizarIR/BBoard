@@ -1,6 +1,5 @@
 from django.urls import path, include
 from django.contrib.auth.urls import *
-from django.views.generic import TemplateView
 
 from .views import Register, MyLoginView, EmailVerify, ConfirmEmailView, InvalidVerifyView
 
@@ -19,5 +18,4 @@ urlpatterns = [
         name='verify_email',
     ),
     path('confirm_email/', ConfirmEmailView.as_view() , name='confirm_email'),
-
 ]

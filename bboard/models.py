@@ -5,7 +5,6 @@ from django.urls import reverse
 
 from unidecode import unidecode
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.utils.translation import gettext_lazy as _
 
 
 class OneTimeCode(models.Model):
@@ -17,6 +16,7 @@ class OneTimeCode(models.Model):
         'User',
         on_delete=models.CASCADE,
         verbose_name="Пользователь")
+
     class Meta:
         verbose_name = 'Одноразовый код'
         verbose_name_plural = 'Одноразовые коды'
@@ -24,7 +24,7 @@ class OneTimeCode(models.Model):
 
 class User(AbstractUser):
     email = models.EmailField(
-        _("email address"),
+        "email address",
         unique=True
     )
 
@@ -40,12 +40,8 @@ class User(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
+
 class Category(models.Model):
-    """
-    Модель Category, поля:
-        - название категории, поле уникально
-        - slug
-    """
     name = models.CharField(
         max_length=64,
         unique=True,
@@ -77,8 +73,8 @@ class Reply(models.Model):
         return f"{self.id}: {self.text}"
 
     def get_absolute_url(self):
-        # reply это имя маршрута
-        return reverse('reply', kwargs={'pk': self.pk}) # for view
+        # reply  - name of route
+        return reverse('reply', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = 'Отклик'
@@ -98,15 +94,12 @@ class Post(models.Model):
     is_published = models.BooleanField(default=True, verbose_name="Опубликовать")
 
     def __str__(self):
-        # return f"{self.create_date:%Y-%m-%d %H:%M} --- {self.header_post}"
         return f"{self.id}: {self.title}"
 
     def get_absolute_url(self):
-        # post это имя маршрута
-        # return reverse('post', kwargs={'post_slug': self.slug}) # для функции
-        return reverse('post', kwargs={'slug': self.slug}) # for view
+        return reverse('post', kwargs={'slug': self.slug})
 
-    def save(self, *args, **kwargs):  # new
+    def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(unidecode(self.title))
         return super(Post, self).save(*args, **kwargs)
@@ -114,4 +107,3 @@ class Post(models.Model):
     class Meta:
         verbose_name = 'Объявление'
         verbose_name_plural = 'Объявления'
-

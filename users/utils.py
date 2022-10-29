@@ -1,5 +1,3 @@
-import random
-
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
@@ -7,6 +5,7 @@ from django.contrib.auth.tokens import default_token_generator as token_generato
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 
+import random
 
 from bboard.models import OneTimeCode
 from bboard.tasks import send_email_for_verify_celery
@@ -23,12 +22,15 @@ def check_code(code, user):
             return True
     return False
 
+
 def generate_code(user):
     code = ''.join(random.choices('0123456789', k=4))
     OneTimeCode.objects.create(code=code, user=user)
     return code
 
+
 def send_email_for_verify(request, user):
+    """Send email directly or by Celery when user create or change"""
     current_site = get_current_site(request)
     context = {
         'user': user,
@@ -41,9 +43,9 @@ def send_email_for_verify(request, user):
         'registration/verify_email.html',
         context=context,
     )
-    user_to_email=(user.email, user.username, user.first_name)
+    user_to_email = (user.email, user.username, user.first_name)
     if not USE_CELERY_SEND_EMAIL:
-        email=EmailMessage(
+        email = EmailMessage(
             'Подтвердите свой email',
             html_content,
             to=[user.email],

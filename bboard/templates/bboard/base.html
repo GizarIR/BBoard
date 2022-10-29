@@ -65,13 +65,13 @@
 			<!-- Пагинация -->
 			<nav class="list-pages">
 				<ul>
-					<!-- Определяем нужна ли первая стрелочка -->
+					<!-- First arrow -->
 					{% if page_obj.has_previous %}
 					<li class="page-num">
 						<a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
 					</li>
 					{% endif %}
-					<!-- Основная прорисовка кнопок пагинации -->
+					<!-- Main buttons -->
 					{% for p in paginator.page_range %}
 							   {% if page_obj.number == p %}
 					<li class="page-num page-num-selected">{{ p }}</li>
@@ -81,7 +81,7 @@
 					</li>
 							   {% endif %}
 					{% endfor %}
-					<!-- Определяем нужна ли последняя стрелочка -->
+					<!-- Last arrow -->
 					{% if page_obj.has_next %}
 					<li class="page-num">
 							 <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
@@ -89,9 +89,9 @@
 					{% endif %}
 				</ul>
 			</nav>
-			<!-- Конец пагинации -->
+			<!-- End pagination -->
 		</div>
-		<!-- Конец блока контента -->
+		<!-- End content -->
 	</td></tr></table>
 	</td></tr>
 	<!-- Footer -->
@@ -100,6 +100,6 @@
 			<p>&copy; 2022 Частичное или полное копирование информации с данного сайта для распространения на других ресурсах, в том числе и бумажных, строго запрещено.</p>
 		</div>
 	</td></tr></table>
-	<!-- Конец footer'а и страницы -->
+	<!-- End footer -->
 </body>
 </html>

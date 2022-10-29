@@ -19,11 +19,8 @@ load_dotenv(dotenv_path)
 PASSWORD_EMAIL = os.environ.get("PASSWORD_EMAIL")
 EMAIL_ADMIN = os.environ.get("EMAIL_ADMIN")
 ADMIN_EMAIL_SERVER = os.environ.get("ADMIN_EMAIL_SERVER")
-
 MY_EMAIL_HOST = os.environ.get("MY_EMAIL_HOST")
 MY_EMAIL_HOST_USER = os.environ.get("MY_EMAIL_HOST_USER")
-
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,12 +37,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-#AFP
+# AFP
 AUTH_USER_MODEL='bboard.User'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
 #End AFP
 
 # Application definition
@@ -57,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # Added for project (AFP)
     'django.contrib.sites',
     'django.contrib.flatpages',
@@ -81,6 +78,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     # AFP
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     # End AFP
@@ -153,6 +151,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
 # AFP
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # STATICFILES_DIRS = [] # не стандартные пути статичных файлов
@@ -186,10 +185,7 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-# настройки почты
-
-# настройка позволяющая получать письма в консоль на период отладки
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# setup email block
 
 EMAIL_HOST = MY_EMAIL_HOST
 EMAIL_PORT = 465
@@ -199,25 +195,18 @@ EMAIL_USE_SSL = True
 
 ADMINS = [
     ('Gizar', EMAIL_ADMIN),
-    # список всех админов в формате ('имя', 'их почта')
 ]
 SERVER_EMAIL = ADMIN_EMAIL_SERVER
 
-# Группа настроек Redis для работы с Celery
-# Переменная позволяющая настроить приложение на использование отправки почты через Celery
+# Block setup Redis and Celery
+# Selector for change send email mode (asynchronously / synchronously)
 USE_CELERY_SEND_EMAIL = True
-# настройка позволяющая получать письма в консоль на период отладки
+# for tests
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# указывает на URL брокера сообщений (Redis). По умолчанию он находится на порту 6379.
 CELERY_BROKER_URL = 'redis://localhost:6379'
-# указывает на хранилище результатов выполнения задач
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-# допустимый формат данных.
 CELERY_ACCEPT_CONTENT = ['application/json']
-# метод сериализации задач
 CELERY_TASK_SERIALIZER = 'json'
-# метод сериализации результатов
 CELERY_RESULT_SERIALIZER = 'json'
-
 # End AFP

@@ -1,14 +1,15 @@
 from django.db.models.signals import post_save
-from django.dispatch import receiver  # импортируем нужный декоратор
-from django.core.mail import mail_managers, EmailMultiAlternatives
+from django.dispatch import receiver  #
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-from .models import Reply, Post, User
+from .models import Reply, Post
 from project.settings import USE_CELERY_SEND_EMAIL
 from .tasks import send_email_reply_celery
 
+
 def send_email_reply(user_to_email, post, reply, title_email, template):
-    "Отправка уведомлений на email выбранным способом в зависимости от настроек"
+    """Function for send email by Celery or directly"""
     print(f'Подготовлен к отправке список для Celery: {user_to_email[0]}')
     if user_to_email[0] is not None:
         html_content = render_to_string(
@@ -20,7 +21,7 @@ def send_email_reply(user_to_email, post, reply, title_email, template):
             }
         )
         if not USE_CELERY_SEND_EMAIL:
-            # Синхронно
+            # synchronously
             msg = EmailMultiAlternatives(
                 subject=title_email,
                 body=reply.text,
@@ -31,15 +32,16 @@ def send_email_reply(user_to_email, post, reply, title_email, template):
             print(f'Отправка письма подписчику {user_to_email[0]}...')
             msg.send()
         else:
-            # запускаем асинхронно для каждого отправления Celery
+            # asynchronously
             send_email_reply_celery.delay(user_to_email, title_email, html_content)
     else:
         print('Email для отправки не найден')
     return
 
+
 @receiver(post_save, sender=Reply)
 def notify_change_reply(sender, instance, created, **kwargs):
-    """Перехват сигнала для уведомления о создании и изменениях в отклике"""
+    """Handler signal create or change reply"""
     reply = instance
     post = Post.objects.get(pk=instance.post.pk)
     author_reply = (reply.user.email, reply.user.username, reply.user.first_name)

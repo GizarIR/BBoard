@@ -3,7 +3,6 @@ from django.contrib.auth.forms import (
     UserCreationForm as DjangoUserCreationForm,
     AuthenticationForm as DjangoAuthenticationForm
 )
-
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -37,7 +36,8 @@ class MyAuthenticationForm(DjangoAuthenticationForm):
                 clear_old_code(self.user_cache)
                 send_email_for_verify(self.request, self.user_cache)
                 raise ValidationError(
-                    'Ваш email не подтвержден, вам повторно отправлен email c кодом, проверьте Ваш email и следуйте инструкциям',
+                    'Ваш email не подтвержден, вам повторно отправлен email c кодом, '
+                    'проверьте Ваш email и следуйте инструкциям',
                     code="invalid_login",
                 )
 

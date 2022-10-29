@@ -7,16 +7,17 @@ menu = [{'title': "Главная", 'url_name': 'home'},
         {'title': "Личный кабинет", 'url_name': 'replies_list_search'},
         {'title': "Выйти", 'url_name': 'logout'},
         {'title': "Войти", 'url_name': 'login'},
-        # {'title': "Зарегистрироваться", 'url_name': 'register'},
         ]
 
 
 class DataMixin:
+    """Class for expand views context for manage menu and pagination"""
     paginate_by = 2
+
     def get_user_context(self, **kwargs):
         context = kwargs
-        # categories = Category.objects.all()
-        categories =  Category.objects.annotate(Count('post'))
+        # categories = Category.objects.all() # change this if you want to show all categories on main site
+        categories = Category.objects.annotate(Count('post'))
 
         user_menu = menu.copy()
         if not self.request.user.is_authenticated:

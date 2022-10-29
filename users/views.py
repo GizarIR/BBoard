@@ -1,9 +1,7 @@
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.views import LoginView as DjangoLoginView
 from django.core.exceptions import ValidationError
-# from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
 from django.utils.http import urlsafe_base64_decode
 from django.views import View
 from django.contrib.auth.tokens import default_token_generator as token_generator
@@ -15,11 +13,14 @@ from bboard.utils import DataMixin
 from .utils import send_email_for_verify, check_code, clear_old_code
 from bboard.tasks import send_email_for_verify_celery
 from project.settings import USE_CELERY_SEND_EMAIL
+
+
 User = get_user_model()
 
 
 class InvalidVerifyView(DataMixin, TemplateView):
-    template_name='registration/invalid_verify.html'
+    """View for present information when check code is not valid """
+    template_name = 'registration/invalid_verify.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -29,7 +30,8 @@ class InvalidVerifyView(DataMixin, TemplateView):
 
 
 class ConfirmEmailView(DataMixin, TemplateView):
-    template_name='registration/confirm_email.html'
+    """View for present information when one time code sent to email """
+    template_name = 'registration/confirm_email.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -39,7 +41,8 @@ class ConfirmEmailView(DataMixin, TemplateView):
 
 
 class EmailVerify(DataMixin, View):
-    template_name='registration/verify_email_form.html'
+    """View for form check email and code valid"""
+    template_name = 'registration/verify_email_form.html'
 
     def get(self, request, uidb64, token):
         user = self.get_user(uidb64)
@@ -49,7 +52,7 @@ class EmailVerify(DataMixin, View):
         context = {
             'user': user,
             'uid': uidb64,
-            'token':token,
+            'token': token,
             'form': EmailVerifyForm,
             'menu': menu,
             'categories': categories,
@@ -89,7 +92,8 @@ class EmailVerify(DataMixin, View):
             user = None
         return user
 
-class MyLoginView(DataMixin,DjangoLoginView):
+
+class MyLoginView(DataMixin, DjangoLoginView):
     form_class = MyAuthenticationForm
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -100,7 +104,7 @@ class MyLoginView(DataMixin,DjangoLoginView):
 
 
 class Register(DataMixin, View):
-
+    """View for registration form with email """
     template_name = 'registration/register.html'
 
     def get(self, request):
