@@ -189,7 +189,7 @@ CKEDITOR_CONFIGS = {
 # настройки почты
 
 # настройка позволяющая получать письма в консоль на период отладки
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_HOST = MY_EMAIL_HOST
 EMAIL_PORT = 465
@@ -204,6 +204,8 @@ ADMINS = [
 SERVER_EMAIL = ADMIN_EMAIL_SERVER
 
 # Группа настроек Redis для работы с Celery
+
+MY_CELERY_SEND_EMAIL = True
 # указывает на URL брокера сообщений (Redis). По умолчанию он находится на порту 6379.
 CELERY_BROKER_URL = 'redis://localhost:6379'
 # указывает на хранилище результатов выполнения задач

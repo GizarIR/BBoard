@@ -12,18 +12,15 @@ from .models import Post, Reply
 
 
 @shared_task
-def send_email_reply_celery(post_pk, subject_email, subscriber, html_content):
-    post = Post.objects.get(pk=post_pk)
+def send_email_reply_celery(user_to_email, title_email, html_content):
 
     msg = EmailMultiAlternatives(
-        subject=subject_email,
-        body=post.text_post,
+        subject=title_email,
+        body="",
         from_email='gizarir@mail.ru',
-        to=[subscriber[0], ],
+        to=[user_to_email[0], ],
     )
     msg.attach_alternative(html_content, "text/html")
-
-    print(_(f'Sending a message to the subscriber {subscriber[0]}...')) #f'Отправка письма подписчику {subscriber[0]}...
-
+    print(f'Отправка письма подписчику {user_to_email[0]}...')
     msg.send()
     return

@@ -4,6 +4,10 @@ from django.core.mail import mail_managers, EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 from .models import Reply, Post
+# from project.project import settings
+from .tasks import send_email_reply_celery
+
+MY_CELERY_SEND_EMAIL=True
 
 def send_email_reply(user_to_email, post, reply, title_email, template):
     "Отправка уведомлений на email синхронным способом"
@@ -17,21 +21,22 @@ def send_email_reply(user_to_email, post, reply, title_email, template):
                 'username': user_to_email[2] if user_to_email[2] else user_to_email[1],
             }
         )
-
-        # запускаем асинхронно для каждого отправления Celery
-        # send_mails_new_pub.delay(post.id, subject_email, [subscriber[0],], html_content)
-
-        # Ниже код ("commented") перенесен в задачи tasks.py для усовершенствования и
-        # отправки писем при помощи асинхронной модели с использованием Celery и Redis
-        msg = EmailMultiAlternatives(
-            subject=title_email,
-            body=reply.text,
-            from_email='gizarir@mail.ru',
-            to=[user_to_email[0], ],
-        )
-        msg.attach_alternative(html_content, "text/html")
-        print(f'Отправка письма подписчику {user_to_email[0]}...')
-        msg.send()
+        if not MY_CELERY_SEND_EMAIL:
+            # Ниже код ("commented") перенесен в задачи tasks.py для усовершенствования и
+            # отправки писем при помощи асинхронной модели с использованием Celery и Redis
+            msg = EmailMultiAlternatives(
+                subject=title_email,
+                body=reply.text,
+                from_email='gizarir@mail.ru',
+                to=[user_to_email[0], ],
+            )
+            msg.attach_alternative(html_content, "text/html")
+            print(f'Отправка письма подписчику {user_to_email[0]}...')
+            msg.send()
+        else:
+            # запускаем асинхронно для каждого отправления Celery
+            send_email_reply_celery.delay(user_to_email, title_email, html_content)
+    print('Email для отправки не найден')
     return
 
 @receiver(post_save, sender=Reply)
