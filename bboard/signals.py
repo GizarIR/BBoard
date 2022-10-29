@@ -24,7 +24,7 @@ def send_email_reply(user_to_email, post, reply, title_email, template):
             # synchronously
             msg = EmailMultiAlternatives(
                 subject=title_email,
-                body=reply.text,
+                body="",
                 from_email='gizarir@mail.ru',
                 to=[user_to_email[0], ],
             )
