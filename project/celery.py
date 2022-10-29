@@ -1,12 +1,12 @@
-# Как запускать celery задачи
-#  Также необходимо установить Celery, Redis и запустить 4 терминала
-# 1 - общий для запуска сервера Redis: redis-server (Ctrl-C -> stop)
-# 2 - терминал окружения проекта: python3 manage.py runserver
-# 3 - терминал окружения проекта для запуска задач без расписания: celery -A project worker -l INFO --concurrency=10
-#  где --concurrency - количество процессов, которые могут на нём запускаться
-# 4 - (опционально) терминал окружения проекта для запуска задач с расписанием: celery -A project beat -l INFO
-# где beat м.б. заменен на флаг -B после INFO
-# кроме того произведена установка в окружение и настройка в settings.py
+# How to run celery tasks
+# You also need to install Celery, Redis and run 4 terminals
+# 1 - common to run the Redis server: redis-server (Ctrl-C -> stop)
+# 2 - terminal of the project environment: python 3 manage.py runserver
+# 3 - project environment terminal for running tasks without a schedule: celeri -A project worker -info --concurrency=10
+# where --concurrency is the number of processes that can run on it
+# 4 - (optional) project environment terminal for running scheduled tasks: celery -A project beat -l INFO
+# where beat m.b. is replaced by the -B flag after INFO
+# in addition, installation in the environment and configuration in settings.py
 
 import os
 from celery import Celery
