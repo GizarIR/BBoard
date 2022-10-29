@@ -214,12 +214,9 @@ class AddPostView(LoginRequiredMixin, DataMixin, CreateView):
 
 class AddReplyView(LoginRequiredMixin, DataMixin, View):
     form_class = AddReplyForm
-    # initial = {'post_id': ''}
     template_name = 'bboard/reply_add.html'
 
     def get(self, request, post_slug, *args, **kwargs):
-        # self.initial = post_id
-        # form = self.form_class(initial=self.initial)
         form = self.form_class()
         categories = self.get_user_context()['categories']
         menu = self.get_user_context()['menu']
