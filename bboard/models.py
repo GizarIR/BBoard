@@ -1,33 +1,12 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.template.defaultfilters import slugify
-# from tinymce import models as tinymce_models
 from django.urls import reverse
 
 from unidecode import unidecode
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.utils.translation import gettext_lazy as _
 
-
-# class Author(models.Model):
-#     """
-#     Модель Author - объекты всех авторов, поля:
-#         - cвязь «один к одному», с встроенной моделью пользователей User;
-#     """
-#     author_user = models.OneToOneField(
-#         User,
-#         on_delete=models.CASCADE,
-#         verbose_name="Автор",
-#     )
-#     one_time_code = models.CharField(max_length=255)
-#     time_created = models.DateTimeField(auto_now_add=True)
-#
-#     def __str__(self):
-#         return f'{self.author_user.username}'
-#
-#     class Meta:
-#         verbose_name = 'Автор'
-#         verbose_name_plural = 'Авторы'
 
 class OneTimeCode(models.Model):
     code = models.CharField(
