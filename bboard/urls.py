@@ -21,21 +21,14 @@ from .views import *
 urlpatterns = [
     # path('', index, name='home'),
     path('', PostsView.as_view(), name='home'),
-    path('about/', about, name='about'),
-    # path('addpage/', addpage, name='add_page'),
     path('addpage/', AddPostView.as_view(), name='add_page'),
-    path('contact/', contact, name='contact'),
-    # path('login/', login, name='login'),
-    # path('post/<slug:post_slug>/', show_post, name='post'),
     path('post/<slug:slug>/', PostDetail.as_view(), name='post'),
     path('post/<slug:slug>/update/', PostUpdate.as_view(), name='update_post'),
-    # path('category/<slug:cat_slug>/', show_category, name='category'),
     path('category/<slug:cat_slug>/', PostsCategoryView.as_view(), name='category'),
     path('reply/<int:pk>/', ReplyDetail.as_view(), name='reply'),
     path('addreply/<slug:post_slug>/', AddReplyView.as_view(), name='add_reply'),
     path('lk/', RepliesListSearchView.as_view(), name='replies_list_search'),
     path('lk/<int:reply_pk>/change_approved/', change_approved, name='change_approved'),
     path('lk/<int:reply_pk>/reply_delete/', reply_delete, name='reply_delete'),
-
 ]
 

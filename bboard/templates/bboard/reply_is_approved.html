@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Изменение статуса Вашего отклика на объявление на портале BBoard</title>
+</head>
+<body>
+    <h2>Здравствуй, {{ username }}!</h2>
+    <p> Автор объявления: {{ post.user.username }}</p>
+    <p> изменил статус объявление: {{ reply.post }}</p>
+    <p> Разрешено к публикации на: {{ reply.is_approved }}</p>
+    <p> Подробнее по <a href="http://127.0.0.1:8000/reply/{{ reply.pk }}">ссылке.</a></p>
+</body>
+</html>

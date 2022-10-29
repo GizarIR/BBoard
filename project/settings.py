@@ -9,10 +9,21 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-import os
 from pathlib import Path
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 
-import django.core.mail.backends.console
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+PASSWORD_EMAIL = os.environ.get("PASSWORD_EMAIL")
+EMAIL_ADMIN = os.environ.get("EMAIL_ADMIN")
+ADMIN_EMAIL_SERVER = os.environ.get("ADMIN_EMAIL_SERVER")
+
+MY_EMAIL_HOST = os.environ.get("MY_EMAIL_HOST")
+MY_EMAIL_HOST_USER = os.environ.get("MY_EMAIL_HOST_USER")
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,10 +45,6 @@ AUTH_USER_MODEL='bboard.User'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
-
-# настройка позволяющая получать письма в консоль на период отладки
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 #End AFP
 
@@ -178,4 +185,22 @@ CKEDITOR_CONFIGS = {
             ]}],
     },
 }
+
+# настройки почты
+
+# настройка позволяющая получать письма в консоль на период отладки
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_HOST = MY_EMAIL_HOST
+EMAIL_PORT = 465
+EMAIL_HOST_USER = MY_EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = PASSWORD_EMAIL
+EMAIL_USE_SSL = True
+
+ADMINS = [
+    ('Gizar', EMAIL_ADMIN),
+    # список всех админов в формате ('имя', 'их почта')
+]
+SERVER_EMAIL = ADMIN_EMAIL_SERVER
+
 # End AFP

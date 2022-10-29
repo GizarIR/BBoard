@@ -73,15 +73,6 @@ class PostUpdate(DataMixin, UpdateView):
 def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
-def about(request):
-    return render(request, 'bboard/about.html', {'menu': menu, 'title': 'О сайте'})
-
-def contact(request):
-    return HttpResponse("Обратная связь")
-
-def login(request):
-    return HttpResponse("Авторизация")
-
 # def index(request):
 #     posts = Post.objects.all()
 #     cats = Category.objects.all()
@@ -94,15 +85,6 @@ def login(request):
 #     }
 #     return render(request, 'bboard/index.html', context=context)
 #
-# def show_post(request, post_slug):
-#     post = get_object_or_404(Post, slug=post_slug)
-#     context = {
-#         'post': post,
-#         'menu': menu,
-#         'title': post.title,
-#         'cat_selected': 1,
-#     }
-#     return render(request, 'bboard/post.html', context=context)
 #
 # def show_category(request, cat_slug):
 #     posts = Post.objects.filter(category__slug=cat_slug)
