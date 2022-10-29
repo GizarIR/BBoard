@@ -37,11 +37,11 @@ def send_email_for_reply(user_to_email, post, reply, title_email, template):
 def notify_managers_appointment(sender, instance, created, **kwargs):
     """Уведомление подписчиков о выходе новой публикации в категории"""
     reply = instance
-    post = Post.objects.get(pk=instance.post)
+    post = Post.objects.get(pk=instance.post.pk)
     author_reply = (reply.user.email, reply.user.username, reply.user.first_name)
     author_post = (post.user.email, post.user.username, post.user.first_name)
 
-    if reply.is_created:
+    if created:
         subject_email=f'Новый отклик на Ваше объявление'
         send_email_for_reply(author_post, post, reply, subject_email, 'reply_created.html')
     else:
