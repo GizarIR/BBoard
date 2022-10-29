@@ -7,10 +7,11 @@
 </head>
 <body>
     <h2>Здравствуй, {{ username }}. На портале BBoard новый отклик на ваше объявление!</h2>
-    <p> Автор: {{ reply.user.username }}</p>
-    <p> Дата опубликования: {{ reply.time_create }}</p>
-    <p> Объявление: {{ reply.post }}</p>
-    <p> Текст отклика: {{ reply.text }}</p>
-    <p> Подробнее по <a href="http://127.0.0.1:8000/reply/{{ reply.pk }}">ссылке.</a></p>
+    <p>Автор: {{ reply.user.username }}</p>
+    <p>Дата опубликования: {{ reply.time_create }}</p>
+    <p>Объявление: {{ reply.post }}</p>
+    <p>Текст отклика: {{ reply.text }}</p>
+    <p>Подробнее по <a href="http://127.0.0.1:8000/reply/{{ reply.pk }}">ссылке.</a></p>
+    <p>С уважением, команда портала</p>
 </body>
 </html>

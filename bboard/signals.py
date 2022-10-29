@@ -4,10 +4,10 @@ from django.core.mail import mail_managers, EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 from .models import Reply, Post
-# from project.project import settings
+from project.settings import USE_CELERY_SEND_EMAIL
 from .tasks import send_email_reply_celery
 
-MY_CELERY_SEND_EMAIL=True
+# MY_CELERY_SEND_EMAIL=True
 
 def send_email_reply(user_to_email, post, reply, title_email, template):
     "Отправка уведомлений на email синхронным способом"
@@ -21,7 +21,7 @@ def send_email_reply(user_to_email, post, reply, title_email, template):
                 'username': user_to_email[2] if user_to_email[2] else user_to_email[1],
             }
         )
-        if not MY_CELERY_SEND_EMAIL:
+        if not USE_CELERY_SEND_EMAIL:
             # Ниже код ("commented") перенесен в задачи tasks.py для усовершенствования и
             # отправки писем при помощи асинхронной модели с использованием Celery и Redis
             msg = EmailMultiAlternatives(
@@ -36,7 +36,8 @@ def send_email_reply(user_to_email, post, reply, title_email, template):
         else:
             # запускаем асинхронно для каждого отправления Celery
             send_email_reply_celery.delay(user_to_email, title_email, html_content)
-    print('Email для отправки не найден')
+    else:
+        print('Email для отправки не найден')
     return
 
 @receiver(post_save, sender=Reply)
