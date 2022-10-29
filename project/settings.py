@@ -35,6 +35,8 @@ AUTH_USER_MODEL='bboard.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+
+# настройка позволяющая получать письма в консоль на период отладки
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 #End AFP
