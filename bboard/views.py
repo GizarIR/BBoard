@@ -149,8 +149,6 @@ class PostsView(DataMixin, ListView):
     model = Post
     template_name = 'bboard/index.html'
     context_object_name = 'posts'
-    # extra_context = {'title' : 'Главная страница'}  # для статичных данных
-    # paginate_by = 3 # определен в DataMixin
 
     #  Добавляем контекст в шаблоны
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -214,7 +212,7 @@ class AddPostView(LoginRequiredMixin, DataMixin, CreateView):
         return super().form_valid(form)
 
 
-class AddReplyView(DataMixin, View):
+class AddReplyView(LoginRequiredMixin, DataMixin, View):
     form_class = AddReplyForm
     # initial = {'post_id': ''}
     template_name = 'bboard/reply_add.html'
