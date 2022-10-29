@@ -203,4 +203,16 @@ ADMINS = [
 ]
 SERVER_EMAIL = ADMIN_EMAIL_SERVER
 
+# Группа настроек Redis для работы с Celery
+# указывает на URL брокера сообщений (Redis). По умолчанию он находится на порту 6379.
+CELERY_BROKER_URL = 'redis://localhost:6379'
+# указывает на хранилище результатов выполнения задач
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+# допустимый формат данных.
+CELERY_ACCEPT_CONTENT = ['application/json']
+# метод сериализации задач
+CELERY_TASK_SERIALIZER = 'json'
+# метод сериализации результатов
+CELERY_RESULT_SERIALIZER = 'json'
+
 # End AFP

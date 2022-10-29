@@ -5,7 +5,8 @@ from django.template.loader import render_to_string
 
 from .models import Reply, Post
 
-def send_email_for_reply(user_to_email, post, reply, title_email, template):
+def send_email_reply(user_to_email, post, reply, title_email, template):
+    "Отправка уведомлений на email синхронным способом"
     print(f'Подготовлен к отправке список для Celery: {user_to_email[0]}')
     if user_to_email[0] is not None:
         html_content = render_to_string(
@@ -26,25 +27,25 @@ def send_email_for_reply(user_to_email, post, reply, title_email, template):
             subject=title_email,
             body=reply.text,
             from_email='gizarir@mail.ru',
-            to=[user_to_email[0],],
+            to=[user_to_email[0], ],
         )
         msg.attach_alternative(html_content, "text/html")
         print(f'Отправка письма подписчику {user_to_email[0]}...')
         msg.send()
-
+    return
 
 @receiver(post_save, sender=Reply)
-def notify_managers_appointment(sender, instance, created, **kwargs):
-    """Уведомление подписчиков о выходе новой публикации в категории"""
+def notify_change_reply(sender, instance, created, **kwargs):
+    """Уведомление о создании и изменениях в отклике"""
     reply = instance
     post = Post.objects.get(pk=instance.post.pk)
     author_reply = (reply.user.email, reply.user.username, reply.user.first_name)
     author_post = (post.user.email, post.user.username, post.user.first_name)
 
     if created:
-        subject_email=f'Новый отклик на Ваше объявление'
-        send_email_for_reply(author_post, post, reply, subject_email, 'reply_created.html')
+        subject_email = f'Новый отклик на Ваше объявление'
+        send_email_reply(author_post, post, reply, subject_email, 'reply_created.html')
     else:
         subject_email = f'Изменение статуса Вашего отклика на портале Bboard'
-        send_email_for_reply(author_reply, post, reply, subject_email, 'reply_is_approved.html')
+        send_email_reply(author_reply, post, reply, subject_email, 'reply_is_approved.html')
     return
