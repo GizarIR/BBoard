@@ -9,3 +9,5 @@ The following functionality is implemented:
 6) user's personal account for editing bulletins and comments to them;
 7) editable list of categories.
 
+To configure sending emails via Celery and Redis, use the USE_CELERY_SEND_EMAIL variable
+
