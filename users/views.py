@@ -13,8 +13,8 @@ from .forms import MyUserCreationForm, MyAuthenticationForm, EmailVerifyForm
 
 from bboard.utils import DataMixin
 from .utils import send_email_for_verify, check_code, clear_old_code
-
-
+from bboard.tasks import send_email_for_verify_celery
+from project.settings import USE_CELERY_SEND_EMAIL
 User = get_user_model()
 
 

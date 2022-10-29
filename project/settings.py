@@ -206,6 +206,9 @@ SERVER_EMAIL = ADMIN_EMAIL_SERVER
 # Группа настроек Redis для работы с Celery
 # Переменная позволяющая настроить приложение на использование отправки почты через Celery
 USE_CELERY_SEND_EMAIL = True
+# настройка позволяющая получать письма в консоль на период отладки
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # указывает на URL брокера сообщений (Redis). По умолчанию он находится на порту 6379.
 CELERY_BROKER_URL = 'redis://localhost:6379'
 # указывает на хранилище результатов выполнения задач

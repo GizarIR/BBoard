@@ -9,6 +9,8 @@ from django.core.mail import EmailMessage
 
 
 from bboard.models import OneTimeCode
+from bboard.tasks import send_email_for_verify_celery
+from project.settings import USE_CELERY_SEND_EMAIL
 
 
 def clear_old_code(user):
@@ -35,13 +37,19 @@ def send_email_for_verify(request, user):
         "token": token_generator.make_token(user),
         "code": generate_code(user),
     }
-    message = render_to_string(
+    html_content = render_to_string(
         'registration/verify_email.html',
         context=context,
     )
-    email=EmailMessage(
-        'Подтвердите свой email',
-        message,
-        to=[user.email],
-    )
-    email.send()
+    user_to_email=(user.email, user.username, user.first_name)
+    if not USE_CELERY_SEND_EMAIL:
+        email=EmailMessage(
+            'Подтвердите свой email',
+            html_content,
+            to=[user.email],
+        )
+        email.send()
+        return print('Email отправлен синхронно')
+    else:
+        send_email_for_verify_celery.delay(html_content, user_to_email)
+        return print('Email отправлен в Celery для асинхронной отправки')

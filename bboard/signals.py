@@ -3,14 +3,12 @@ from django.dispatch import receiver  # импортируем нужный де
 from django.core.mail import mail_managers, EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-from .models import Reply, Post
+from .models import Reply, Post, User
 from project.settings import USE_CELERY_SEND_EMAIL
 from .tasks import send_email_reply_celery
 
-# MY_CELERY_SEND_EMAIL=True
-
 def send_email_reply(user_to_email, post, reply, title_email, template):
-    "Отправка уведомлений на email синхронным способом"
+    "Отправка уведомлений на email выбранным способом в зависимости от настроек"
     print(f'Подготовлен к отправке список для Celery: {user_to_email[0]}')
     if user_to_email[0] is not None:
         html_content = render_to_string(
@@ -22,8 +20,7 @@ def send_email_reply(user_to_email, post, reply, title_email, template):
             }
         )
         if not USE_CELERY_SEND_EMAIL:
-            # Ниже код ("commented") перенесен в задачи tasks.py для усовершенствования и
-            # отправки писем при помощи асинхронной модели с использованием Celery и Redis
+            # Синхронно
             msg = EmailMultiAlternatives(
                 subject=title_email,
                 body=reply.text,
@@ -42,7 +39,7 @@ def send_email_reply(user_to_email, post, reply, title_email, template):
 
 @receiver(post_save, sender=Reply)
 def notify_change_reply(sender, instance, created, **kwargs):
-    """Уведомление о создании и изменениях в отклике"""
+    """Перехват сигнала для уведомления о создании и изменениях в отклике"""
     reply = instance
     post = Post.objects.get(pk=instance.post.pk)
     author_reply = (reply.user.email, reply.user.username, reply.user.first_name)

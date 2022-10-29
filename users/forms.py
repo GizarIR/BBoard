@@ -9,6 +9,8 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from .utils import send_email_for_verify, clear_old_code
+from bboard.tasks import send_email_for_verify_celery
+from project.settings import USE_CELERY_SEND_EMAIL
 
 User = get_user_model()
 
