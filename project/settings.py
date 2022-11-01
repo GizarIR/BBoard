@@ -21,6 +21,7 @@ EMAIL_ADMIN = os.environ.get("EMAIL_ADMIN")
 ADMIN_EMAIL_SERVER = os.environ.get("ADMIN_EMAIL_SERVER")
 MY_EMAIL_HOST = os.environ.get("MY_EMAIL_HOST")
 MY_EMAIL_HOST_USER = os.environ.get("MY_EMAIL_HOST_USER")
+MY_DJANGO_SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k_$^1nk7csabnd5=zh5oyf=zxlpo9#q(@c!3cb(_*8*jclnf6='
+SECRET_KEY = MY_DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
